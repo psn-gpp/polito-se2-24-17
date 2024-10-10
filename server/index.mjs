@@ -3,6 +3,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
+import ticketdao from './ticketdao.js';
+import counterdao from './counterdao.js';
+import servicedao from './servicedao.js';
 
 import session from 'express-session';
 
@@ -27,31 +30,67 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // set to true if using HTTPS
+    secure: false, 
     httpOnly: true,
-    sameSite: 'lax' // set the sameSite attribute correctly
+    sameSite: 'lax' 
   }
 }));
 
-app.get('/', (req, res) => {
-  res.send('Welcome to the API!');
-});
+// Services API
 
-
-// GET /api/services/:id,
+// GET /api/services/:id
 app.get('/api/services/:id', async (req, res) => {
   try {
-    /*const result = await dao.getGame(req.params.id, req.user.id)
-    if (result.error) {
-      res.status(404).json(result);
+    const serviceId = parseInt(req.params.id); // Parse the service ID from the request parameters
+    if (isNaN(serviceId)) {
+      return res.status(400).json({ error: 'Invalid service ID' }); // Handle invalid ID
     }
-    else {
-      res.json(result);
-    }*/
+
+    const result = await servicedao.getServiceById(serviceId); // Call the function to get service info
+    if (!result) {
+      return res.status(404).json({ error: 'Service not found' }); // Handle service not found
+    }
+    
+    res.json(result); // Return the service information as JSON
   } catch (err) {
-    res.status(500).end();
+    console.error(err); // Log the error for debugging purposes
+    res.status(500).json({ error: 'Internal server error' }); // Handle server errors
   }
 });
+
+// POST /api/services
+app.post('/api/services', async (req, res) => {
+  const { svcType, avgSvcTime, svcName } = req.body; 
+
+  try {
+    // Validate the request body
+    if (!svcType || !avgSvcTime || !svcName) {
+      return res.status(400).json({ error: 'All fields are required' }); // Return a 400 error if required fields are missing
+    }
+
+    const result = await servicedao.createService(svcType, avgSvcTime, svcName);
+    
+    res.status(201).json({ sid: result.sid }); // Return a 201 Created status with the service ID
+  } catch (err) {
+    console.error(err); 
+    res.status(500).json({ error: 'Internal server error' }); // Handle server errors
+  }
+});
+
+
+
+//.. needed to finish tomorrow
+
+// COUNTER API
+
+
+
+// COUNT SERVICE API
+
+
+// TICKET API
+
+
 
 // activate the server
 app.listen(port, () => {

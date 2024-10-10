@@ -8,7 +8,7 @@ function MyMain() {
     return (
         <Row>
             <Col>
-                <h1>Office Queue Management System</h1>
+                <h2> Take a ticket</h2>
                 <Button /*onClick={}*/ variant="info">
                     Take a ticket
                 </Button>
