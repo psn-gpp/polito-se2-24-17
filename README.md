@@ -13,15 +13,76 @@
 ## APIs Server
 
 
-- GET `/api/services`
-  - Descrizione: return all services indipendent from the type.
-  - Request: No body required.
-  - Response: return  `200 OK` (success) o `500 Internal Server Error` (error generic). 
-  - Response body: (Content-Type: `application/json`)
+### GET `/api/services`
+- **Description:** Returns all services independent from the type.
+- **Request:** No body required.
+- **Response:** Returns `200 OK` (success) or `500 Internal Server Error` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
   ```json
   [
+    {
+      "sid": 1,
+      "svcType": "Type A",
+      "avgSvcTime": 15,
+      "svcName": "Service A"
+    },
+    {
+      "sid": 2,
+      "svcType": "Type B",
+      "avgSvcTime": 30,
+      "svcName": "Service B"
+    }
   ]
   ```
+
+### GET `/api/services/:id`
+- **Description:** Returns the service information for a specific service ID.
+- **Request:** No body required.
+- **Response:** Returns `200 OK` (success), `400 Bad Request` (invalid ID), `404 Not Found` (service not found), or `500 Internal Server Error` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+  {
+    "sid": 1,
+    "svcType": "Type A",
+    "avgSvcTime": 15,
+    "svcName": "Service A"
+  }
+  ```
+
+### POST /api/services
+- **Description:** Creates a new service.
+- **Request Body:** (Content-Type: application/json).
+```json
+  {
+    "svcType": "Type A",
+    "avgSvcTime": 15,
+    "svcName": "Service A"
+  }
+  ```
+- **Response:** Returns 201 Created (success) or 500 Internal Server Error (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+  {
+    "sid": 1,
+  }
+  ```
+### PUT /api/services/:id
+- **Description:** Updates an existing service.
+- **Request Body:** (Content-Type: application/json).
+  ```json
+  {
+    "svcType": "Type A",
+    "avgSvcTime": 15,
+    "svcName": "Service A"
+  }
+  ```
+- **Response:** Returns 204 No Content (success), 400 Bad Request (invalid ID or missing fields), 404 Not Found (service not found), or 500 Internal Server Error (generic error).
+
+### DELETE /api/services/:id
+- **Description:**  Deletes a service.
+- **Request Body:** No body required.
+- **Response:** Returns 200 OK (success), 400 Bad Request (invalid ID), 404 Not Found (service not found), or 500 Internal Server Error (generic error).
+
 
 
 ## Database Tables
