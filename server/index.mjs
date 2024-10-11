@@ -133,7 +133,11 @@ app.delete('/api/services/:id', async (req, res) => {
 });
 export default app;
 
-
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
 
 //.. needed to finish tomorrow
 
@@ -148,7 +152,9 @@ export default app;
 
 
 
-// activate the server
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
+// Export the app and server
+export { app, server };

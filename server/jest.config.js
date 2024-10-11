@@ -1,5 +1,8 @@
 module.exports = {
-    testEnvironment: 'node',
-    testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.js$', // Match files ending with .test.js or .spec.js
-    moduleFileExtensions: ['js', 'json', 'node'],
-  };
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.m?js$': 'babel-jest', // or any other transform you prefer
+  },
+  moduleFileExtensions: ['js', 'mjs', 'json', 'node'],
+  testMatch: ['**/__tests__/**/*.test.js', '**/?(*.)+(spec|test).js'],
+};
