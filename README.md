@@ -49,7 +49,7 @@
   }
   ```
 
-### POST /api/services
+### POST `/api/services`
 - **Description:** Creates a new service.
 - **Request Body:** (Content-Type: application/json).
 ```json
@@ -66,7 +66,7 @@
     "sid": 1,
   }
   ```
-### PUT /api/services/:id
+### PUT `/api/services/:id`
 - **Description:** Updates an existing service.
 - **Request Body:** (Content-Type: application/json).
   ```json
@@ -78,7 +78,7 @@
   ```
 - **Response:** Returns 204 No Content (success), 400 Bad Request (invalid ID or missing fields), 404 Not Found (service not found), or 500 Internal Server Error (generic error).
 
-### DELETE /api/services/:id
+### DELETE `/api/services/:id`
 - **Description:**  Deletes a service.
 - **Request Body:** No body required.
 - **Response:** Returns 200 OK (success), 400 Bad Request (invalid ID), 404 Not Found (service not found), or 500 Internal Server Error (generic error).

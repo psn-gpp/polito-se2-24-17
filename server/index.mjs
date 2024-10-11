@@ -3,9 +3,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import ticketdao from './ticketdao.js';
-import counterdao from './counterdao.js';
-import servicedao from './servicedao.js';
+import ticketdao from './dao/ticketdao.js';
+import counterdao from './dao/counterdao.js';
+import servicedao from './dao/servicedao.js';
 
 import session from 'express-session';
 
