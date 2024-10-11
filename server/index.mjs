@@ -131,7 +131,7 @@ app.delete('/api/services/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' }); // Handle server errors
   }
 });
-
+export default app;
 
 
 
