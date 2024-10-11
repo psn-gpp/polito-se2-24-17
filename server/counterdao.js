@@ -39,10 +39,10 @@ exports.getAllCounters = () => {
  * create a new counter taking the two parameter and return the counter id
  */
 
-exports.createCounter = (isAvailable, cName) => {
+exports.createCounter = (cName) => {
   return new Promise((resolve, reject) => {
-    const query = "INSERT INTO COUNTER (isAvailable, cName) VALUES (?, ?)";
-    db.run(query, [isAvailable, cName], function (err) {
+    const query = "INSERT INTO COUNTER (cName) VALUES (?)";
+    db.run(query, [cName], function (err) {
       if (err) {
         reject(err);
       } else {
@@ -55,10 +55,10 @@ exports.createCounter = (isAvailable, cName) => {
  * update a counter taking the counter id and the two parameter and return the number of changes(discuss)
  */
 
-exports.updateCounter = (cid, isAvailable, cName) => {
+exports.updateCounter = (cid, cName) => {
   return new Promise((resolve, reject) => {
-    const query = "UPDATE COUNTER SET isAvailable = ?, cName = ? WHERE cid = ?";
-    db.run(query, [isAvailable, cName, cid], function (err) {
+    const query = "UPDATE COUNTER SET cName = ? WHERE cid = ?";
+    db.run(query, [cName, cid], function (err) {
       if (err) {
         reject(err);
       } else {
