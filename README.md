@@ -26,6 +26,8 @@
 
 ## Main React Components
 
+## Class diagram
+
 
 
 ## Screenshot
