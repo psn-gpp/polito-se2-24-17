@@ -8,7 +8,6 @@ DROP TABLE IF EXISTS COUNTER;
 
 CREATE TABLE COUNTER (
   cid INTEGER PRIMARY KEY AUTOINCREMENT,  -- Counter ID (Primary Key, Auto-Incremented)
-  isAvailable BOOLEAN NOT NULL,          -- Indicates if the counter is available (open or working)
   cName VARCHAR(100) NOT NULL            -- Name of the counter (e.g., "A", "B", "C", etc.)
 );
 
