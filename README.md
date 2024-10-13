@@ -1,5 +1,22 @@
 # Office Queue Management System
 
+## How to run the Web app
+To run the web app refer to the following step:
+(Note: VS Code is used as a reference IDE)
+
+- Open two terminals (reffered to as 'terminal 1' and 'terminal 2')
+
+- In terminal 1, type the following commands:
+  - `cd server`
+  - `npm i`
+  - `nodemon index.mjs` (to start the server)
+- In terminal 2, type the following commands:
+  - `cd client`
+  - `npm i`
+  - `npm run dev` (to start the client)
+
+- Open a browser window, in the URL field, type `http://localhost:5173/` and press Enter. The client is loaded. The user can interact with the server through the client.
+
 ## React Client Application Routes
 
 - Route `/`: Home page of the queue system, shows buttons to choose the role of the user (customer, manager, officer), redirects to Route `/customer` or `/manager` or `/officer` based on the selected role
@@ -12,6 +29,7 @@
 
 ## APIs Server
 
+### **SERVICES**
 
 ### GET `/api/services`
 - **Description:** Returns all services independent from the type.
@@ -83,6 +101,176 @@
 - **Request Body:** No body required.
 - **Response:** Returns 200 OK (success), 400 Bad Request (invalid ID), 404 Not Found (service not found), or 500 Internal Server Error (generic error).
 
+### **TICKETS**
+<!-- sample to fill -->
+<!-- ###  GET/POST/PUT/DELETE `/api/tickets/sth`
+- **Description:** Do sth
+- **Request Parameters:** _None_.
+- **Request Body:** _None_
+- **Response:** Returns:
+    - `200 OK` (success)
+    - `404 Not Found` (empty db) if entry `:id` is not present in db.
+    - `422 Unprocessable Entity` (validation error).
+    - `500 Internal Server Error` (generic error).
+    - `503 Service Unavailable` (generic error).
+
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+    {
+    }
+  ``` -->
+
+###  GET `/api/tickets`
+- **Description:** Retrieve all tickets in database
+- **Request Parameters:** _None_.
+- **Request Body:** _None_.
+- **Response:** Return:
+    - `200 OK` (success)
+    - `500 Internal Server Error` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+  [
+    {
+      "tid": 1,
+      "sid": 1,
+      "cid": null,
+      "tCode": 1,
+      "date": "2024-10-01", // YYYY-MM-DD
+      "time": "09:45:10", // HH:MM:SS
+      "isServed": 0,
+      "avgWaitTime": null   // TODO in another story
+    },
+    {
+      "tid": 2,
+      "sid": 3,
+      "cid": 1,
+      "tCode": 2,
+      "date": "2024-10-01", // YYYY-MM-DD
+      "time": "10:00:00", // HH:MM:SS
+      "isServed": 1,
+      "avgWaitTime": null  // TODO in another story
+    },
+    ...
+  ]
+  ```
+
+###  GET `/api/tickets/:tid`
+- **Description:** Retrieve ticket with unique `:tid`.
+- **Request Parameters:** `:tid` not empty, integer, >0.
+- **Request Body:** _None_.
+- **Response:** Returns:
+    - `200 OK` (success).
+    - `404 Not Found` (empty db) if ticket `:tid` is not present in db.
+    - `422 Unprocessable Entity` (validation error).
+    - `500 Internal Server Error` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+    {
+      "tid": 2,
+      "sid": 3,
+      "cid": 1,
+      "tCode": 2,
+      "date": "2024-10-01", // YYYY-MM-DD
+      "time": "10:00:00", // HH:MM:SS
+      "isServed": 1,
+      "avgWaitTime": 7
+    }
+  ```
+
+###  POST `/api/tickets`
+- **Description:** Insert a new ticket in database
+- **Request Parameters:** _None_.
+- **Request Body:**
+  ```json
+    {
+      "sid": 3,
+      "date": "2024-10-02", // YYYY-MM-DD
+      "time": "11:00:00", // HH:MM:SS
+    }
+  ```
+- **Response:** Returns:
+    - `200 OK` (success)
+    - `422 Unprocessable Entity` (validation error).
+    - `503 Service Unavailable` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+    {
+      "tid": 3,
+      "sid": 3,
+      "cid": null,
+      "tCode": 1,
+      "date": "2024-10-02", // YYYY-MM-DD
+      "time": "11:00:00", // HH:MM:SS
+      "isServed": 0,
+      "avgWaitTime": null   // TODO in another story, now left null
+    }
+  ```
+
+###  PUT `/api/tickets/:tid/assignCounter`
+- **Description:** Update ticket `:id` with the counter assigned to that ticket
+- **Request Parameters:** `:tid` not empty, integer, >0.
+- **Request Body:** _None_.
+- **Response:** Returns:
+    - `200 OK` (success)
+    - `404 Not Found` (empty db) if ticket `:tid` is not present in db.
+    - `422 Unprocessable Entity` (validation error).
+    - `503 Service Unavailable` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  <!-- ```json
+      "tid": 3,
+      "cid": 1
+  ``` -->
+
+  ```json
+    {
+      "tid": 3,
+      "sid": 3,
+      "cid": 2,
+      "tCode": 1,
+      "date": "2024-10-02", // YYYY-MM-DD
+      "time": "11:00:00", // HH:MM:SS
+      "isServed": 0,
+      "avgWaitTime": null   // TODO in another story, now left null
+    }
+  ```
+
+###  PUT `/api/tickets/:tid/setServed`
+- **Description:** Update ticket `:id` with data that the ticket is served
+- **Request Parameters:** `:tid` not empty, integer, >0.
+- **Request Body:** _None_.
+- **Response:** Returns:
+    - `200 OK` (success)
+    - `404 Not Found` (empty db) if ticket `:tid` is not present in db.
+    - `422 Unprocessable Entity` (validation error).
+    - `503 Service Unavailable` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  <!-- ```json
+      "tid": 3,
+      "isServed": 1
+  ``` -->
+  ```json
+    {
+      "tid": 3,
+      "sid": 3,
+      "cid": 2,
+      "tCode": 1,
+      "date": "2024-10-02", // YYYY-MM-DD
+      "time": "11:00:00", // HH:MM:SS
+      "isServed": 1,
+      "avgWaitTime": null   // TODO in another story, now left null
+    }
+  ```
+
+###  DELETE `/api/tickets/:tid`
+- **Description:** Delete ticket `:tid` from database
+- **Request Parameters:** `:tid` not empty, integer, >0.
+- **Request Body:** _None_
+- **Response:** Returns:
+    - `200 OK` (success)
+    - `404 Not Found` (empty db) if ticket `:tid` is not present in db.
+    - `422 Unprocessable Entity` (validation error).
+    - `503 Service Unavailable` (generic error).
+- **Response Body:** _None_.
 
 
 ## Database Tables
