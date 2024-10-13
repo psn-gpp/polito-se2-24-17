@@ -1,5 +1,3 @@
-
-
 ## Service API Tests
 
 ## Get a service id 
@@ -28,3 +26,262 @@ Content-Type: application/json
 ### delete a service using the id
 DELETE http://localhost:3001/api/services/2 HTTP/1.1
 
+###
+### TICKET APIs test
+###
+
+### get all tickets - ok
+GET http://localhost:3001/api/tickets
+# 200 OK
+# list of tickets [ {}, {}, ... {}]
+
+### get a ticket with existing tid - ok
+GET http://localhost:3001/api/tickets/7
+# 200 OK
+# {
+#   "tid": 7,
+#   "sid": 1,
+#   "cid": null,
+#   "tCode": 1,
+#   "date": "2024-10-01",
+#   "time": "10:05:00",
+#   "isServed": "FALSE",
+#   "avgWaitTime": null
+# }
+
+
+### get a ticket with a non-existing tid
+GET http://localhost:3001/api/tickets/2
+# 404 Not Found
+# {
+#   "error": "ticket id 2 not found"
+# }
+
+
+### get a ticket with an invalid tid != number
+GET http://localhost:3001/api/tickets/abc
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id abc"
+# }
+
+
+### get a ticket with an invalid tid <0
+GET http://localhost:3001/api/tickets/-2
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id -2"
+# }
+
+
+### get a ticket with an invalid tid ==0
+GET http://localhost:3001/api/tickets/0
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id 0"
+# }
+
+
+### insert a new ticket in db with exisiting service id - ok
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": 3
+}
+
+# 200 OK
+# {
+#   "tid": 14,
+#   "sid": 3,
+#   "cid": null,
+#   "tCode": 4,
+#   "date": "2024-10-13",
+#   "time": "21:10:17",
+#   "isServed": 0,
+#   "avgWaitTime": null
+# }
+
+
+### insert a new ticket in db with non-exisiting service id
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": 10
+}
+
+# 404 Not Found
+# {
+#   "error": "Service id 10 not found"
+# }
+
+
+### insert a new ticket in db with invalid service id != number
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": "abc"
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid service id abc"
+# }
+
+
+### insert a new ticket in db with invalid service id <0
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": -3
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid service id -3"
+# }
+
+
+### insert a new ticket in db with invalid service id =0
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": 0
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid service id 0"
+# }
+
+
+### update a ticket with id=tid s.t. it is set served - ok
+PUT http://localhost:3001/api/tickets/12/setServed
+
+# 200 OK
+# {
+#   "tid": 12,
+#   "sid": 3,
+#   "cid": null,
+#   "tCode": 2,
+#   "date": "2024-10-13",
+#   "time": "21:09:56",
+#   "isServed": 1,
+#   "avgWaitTime": null
+# }
+
+### update a ticket with non-existent tid s.t. it is set served
+PUT http://localhost:3001/api/tickets/55/setServed
+
+# 404 Not Found
+# {
+#   "error": "ticket id 55 not found"
+# }
+
+### update a ticket with invalid tid != number s.t. it is set served
+PUT http://localhost:3001/api/tickets/abc/setServed
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id abc"
+# }
+
+### update a ticket with invalid tid ==0 s.t. it is set served
+PUT http://localhost:3001/api/tickets/0/setServed
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id 0"
+# }
+
+
+### delete a ticket with tid - ok
+DELETE http://localhost:3001/api/tickets/7
+# 200 OK
+
+
+### delete a ticket with non-existent tid
+DELETE http://localhost:3001/api/tickets/7
+# 404 Not Found
+# {
+#   "error": "Ticket id 7 not found"
+# }
+
+
+### delete a ticket with invalid tid != number
+DELETE http://localhost:3001/api/tickets/xyz
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id xyz"
+# }
+
+
+### delete a ticket with invalid tid <0
+DELETE http://localhost:3001/api/tickets/-4
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id -4"
+# }
+
+
+### delete a ticket with invalid tid == 0
+DELETE http://localhost:3001/api/tickets/0
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id 0"
+# }
+
+
+### Counter APIs test (1 API call for updating the ticket counter)
+
+### update ticket with assigned counter cid - ok
+## compute the next ticket to assign to counter cid and assign that counter cid to the ticket computed
+## in file index.mjs, in that API, ticket is hard encoded set to tid=11, check if the API call works
+## TODO: implement algorithm of assigning a ticket to the counter cid
+PUT http://localhost:3001/api/counters/1/assignTicket
+# 200 OK
+# {
+#   "tid": 11,
+#   "sid": 3,
+#   "cid": 1,
+#   "tCode": 1,
+#   "date": "2024-10-13",
+#   "time": "21:05:42",
+#   "isServed": 0,
+#   "avgWaitTime": null
+# }
+
+
+### update ticket with assigned counter cid != number
+PUT http://localhost:3001/api/counters/opq/assignTicket
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid counter id opq"
+# }
+
+
+### update ticket with assigned counter cid <0
+PUT http://localhost:3001/api/counters/-2/assignTicket
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid counter id -2"
+# }
+
+
+### update ticket with assigned counter cid ==0
+PUT http://localhost:3001/api/counters/0/assignTicket
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid counter id 0"
+# }
+
+### update ticket with assigned counter cid non-existent 
+PUT http://localhost:3001/api/counters/10/assignTicket
+# 404 Not Found
+# {
+#   "error": "Counter id 10 not found"
+# }

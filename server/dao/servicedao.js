@@ -91,3 +91,24 @@ exports.deleteService = (sid) => {
     });
   });
 };
+
+// auxiliary func
+/**
+ * check if a service exists
+ * @param serviceId - id of service
+ * @returns {Promise<boolean>} Promise resolving to a boolean : true if service exists, false otherwise
+ */
+exports.existsService = (serviceId) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT * FROM SERVICE WHERE sid = ?";
+    db.get(query, [serviceId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row === undefined) {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}

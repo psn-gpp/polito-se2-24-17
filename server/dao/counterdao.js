@@ -83,3 +83,25 @@ exports.deleteCounter = (cid) => {
     });
   });
 };
+
+
+// auxiliary func
+/**
+ * check if a counter exists
+ * @param counterId - id of counter
+ * @returns {Promise<boolean>} Promise resolving to a boolean : true if counter exists, false otherwise
+ */
+exports.existsCounter = (counterId) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT * FROM COUNTER WHERE cid = ?";
+    db.get(query, [counterId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row === undefined) {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}

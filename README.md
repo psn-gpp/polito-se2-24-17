@@ -152,6 +152,11 @@ To run the web app refer to the following step:
     },
     ...
   ]
+
+  or empty array for empty db table
+  [
+
+  ]
   ```
 
 ###  GET `/api/tickets/:tid`
@@ -171,7 +176,7 @@ To run the web app refer to the following step:
       "cid": 1,
       "tCode": 2,
       "date": "2024-10-01", // YYYY-MM-DD
-      "time": "10:00:00", // HH:MM:SS
+      "time": "10:00:00", // HH:mm:ss
       "isServed": 1,
       "avgWaitTime": 7
     }
@@ -183,14 +188,14 @@ To run the web app refer to the following step:
 - **Request Body:**
   ```json
     {
-      "sid": 3,
-      "date": "2024-10-02", // YYYY-MM-DD
-      "time": "11:00:00", // HH:MM:SS
+      "sid": 3
     }
   ```
 - **Response:** Returns:
     - `200 OK` (success)
-    - `422 Unprocessable Entity` (validation error).
+    - `400 Bad Request` (ticket created but ticket id not found in db)
+    - `404 Not Found` (service id not present in db)
+    - `422 Unprocessable Entity` (validation error) - sid should be not empty, integer, >0.
     - `503 Service Unavailable` (generic error).
 - **Response Body:** (Content-Type: `application/json`)
   ```json
@@ -198,34 +203,6 @@ To run the web app refer to the following step:
       "tid": 3,
       "sid": 3,
       "cid": null,
-      "tCode": 1,
-      "date": "2024-10-02", // YYYY-MM-DD
-      "time": "11:00:00", // HH:MM:SS
-      "isServed": 0,
-      "avgWaitTime": null   // TODO in another story, now left null
-    }
-  ```
-
-###  PUT `/api/tickets/:tid/assignCounter`
-- **Description:** Update ticket `:id` with the counter assigned to that ticket
-- **Request Parameters:** `:tid` not empty, integer, >0.
-- **Request Body:** _None_.
-- **Response:** Returns:
-    - `200 OK` (success)
-    - `404 Not Found` (empty db) if ticket `:tid` is not present in db.
-    - `422 Unprocessable Entity` (validation error).
-    - `503 Service Unavailable` (generic error).
-- **Response Body:** (Content-Type: `application/json`)
-  <!-- ```json
-      "tid": 3,
-      "cid": 1
-  ``` -->
-
-  ```json
-    {
-      "tid": 3,
-      "sid": 3,
-      "cid": 2,
       "tCode": 1,
       "date": "2024-10-02", // YYYY-MM-DD
       "time": "11:00:00", // HH:MM:SS
@@ -244,10 +221,6 @@ To run the web app refer to the following step:
     - `422 Unprocessable Entity` (validation error).
     - `503 Service Unavailable` (generic error).
 - **Response Body:** (Content-Type: `application/json`)
-  <!-- ```json
-      "tid": 3,
-      "isServed": 1
-  ``` -->
   ```json
     {
       "tid": 3,
@@ -271,6 +244,31 @@ To run the web app refer to the following step:
     - `422 Unprocessable Entity` (validation error).
     - `503 Service Unavailable` (generic error).
 - **Response Body:** _None_.
+
+### COUNTER APIs
+
+###  PUT `/api/counters/:cid/assignTicket`
+- **Description:** Assign to the counter `:cid` the next ticket to be served
+- **Request Parameters:** `:cid` not empty, integer, >0.
+- **Request Body:** _None_.
+- **Response:** Returns:
+    - `200 OK` (success)
+    - `404 Not Found` (empty db) if counter `:cid` is not present in db.
+    - `422 Unprocessable Entity` (validation error).
+    - `503 Service Unavailable` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+    {
+      "tid": 3,
+      "sid": 3,
+      "cid": 2,
+      "tCode": 1,
+      "date": "2024-10-02", // YYYY-MM-DD
+      "time": "11:00:00", // HH:MM:SS
+      "isServed": 0,
+      "avgWaitTime": null   // TODO in another story, now left null
+    }
+  ```
 
 
 ## Database Tables
