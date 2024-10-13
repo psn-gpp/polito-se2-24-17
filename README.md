@@ -12,8 +12,8 @@
 
 ## APIs Server
 
-
 ### GET `/api/services`
+
 - **Description:** Returns all services independent from the type.
 - **Request:** No body required.
 - **Response:** Returns `200 OK` (success) or `500 Internal Server Error` (generic error).
@@ -36,6 +36,7 @@
   ```
 
 ### GET `/api/services/:id`
+
 - **Description:** Returns the service information for a specific service ID.
 - **Request:** No body required.
 - **Response:** Returns `200 OK` (success), `400 Bad Request` (invalid ID), `404 Not Found` (service not found), or `500 Internal Server Error` (generic error).
@@ -50,23 +51,28 @@
   ```
 
 ### POST `/api/services`
+
 - **Description:** Creates a new service.
 - **Request Body:** (Content-Type: application/json).
+
 ```json
-  {
-    "svcType": "Type A",
-    "avgSvcTime": 15,
-    "svcName": "Service A"
-  }
-  ```
+{
+  "svcType": "Type A",
+  "avgSvcTime": 15,
+  "svcName": "Service A"
+}
+```
+
 - **Response:** Returns 201 Created (success) or 500 Internal Server Error (generic error).
 - **Response Body:** (Content-Type: `application/json`)
   ```json
   {
-    "sid": 1,
+    "sid": 1
   }
   ```
+
 ### PUT `/api/services/:id`
+
 - **Description:** Updates an existing service.
 - **Request Body:** (Content-Type: application/json).
   ```json
@@ -79,112 +85,192 @@
 - **Response:** Returns 204 No Content (success), 400 Bad Request (invalid ID or missing fields), 404 Not Found (service not found), or 500 Internal Server Error (generic error).
 
 ### DELETE `/api/services/:id`
-- **Description:**  Deletes a service.
+
+- **Description:** Deletes a service.
 - **Request Body:** No body required.
 - **Response:** Returns 200 OK (success), 400 Bad Request (invalid ID), 404 Not Found (service not found), or 500 Internal Server Error (generic error).
 
+### COUNTER APIs
 
+### GET `/api/counters`
+
+- **Description:** Returns all counters.
+- **Request:** No body required.
+- **Response:** Returns `200 OK` (success) or `500 Internal Server Error` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+  [
+    {
+      "cid": 1,
+      "cName": "Counter A"
+    },
+    {
+      "cid": 2,
+      "cName": "Counter B"
+    }
+  ]
+  ```
+
+### GET `/api/counters/:id`
+
+- **Description:** Returns the counter information for a specific counter ID.
+- **Request:** No body required.
+- **Response:** Returns `200 OK` (success), `400 Bad Request` (invalid ID), `404 Not Found` (counter not found), or `500 Internal Server Error` (generic error).
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+  {
+    "cid": 1,
+    "cName": "Counter A"
+  }
+  ```
+
+### POST `/api/counters`
+
+- **Description:** Creates a new counter.
+- **Request Body:** (Content-Type: `application/json`)
+  ```json
+  {
+    "cName": "Counter C"
+  }
+  ```
+- **Response:** Returns `201 Created` (success), `400 Bad Request` (invalid fields)
+- **Response Body:** (Content-Type: `application/json`)
+  ```json
+  {
+    "cid": 3
+  }
+  ```
+
+### PUT `/api/counters/:id`
+
+- **Description:** Updates a counter.
+- **Request Body:** (Content-Type: `application/json`)
+  ```json
+  {
+    "cName": "Counter C"
+  }
+  ```
+- **Response:** Returns `204 No Content` (success), `400 Bad Request` (invalid ID or missing fields), `404 Not Found`(counter not found), or `500 Internal Server Error` (generic error).
+
+### DELETE `/api/counters/:id`
+
+- **Description:** Deletes a specific counter by ID.
+- **Request Body:** No body required.
+- **Response:** Returns `200 OK` (success), `400 Bad Request` (invalid ID), `404 Not Found` (counter not found), or `500 Internal Server Error` (generic error).
 
 ## Database Tables
 
 ### COUNTER (cid, cName)
-- **cid**: 
-  - **Type**: INTEGER 
+
+- **cid**:
+  - **Type**: INTEGER
   - **Description**: The unique identifier for each counter (Primary Key). It is auto-incremented, meaning it automatically increases by one with each new record.
-  
-- **cName**: 
-  - **Type**: VARCHAR(100) 
+- **cName**:
+  - **Type**: VARCHAR(100)
   - **Description**: The name of the counter (e.g., "A", "B", "C", etc.). This field cannot be null.
 
 ---
 
 ### SERVICE (sid, svcType, avgSvcTime, svcName)
-- **sid**: 
-  - **Type**: INTEGER 
+
+- **sid**:
+
+  - **Type**: INTEGER
   - **Description**: The unique identifier for each service (Primary Key). It is auto-incremented.
 
-- **svcType**: 
-  - **Type**: VARCHAR(100) 
+- **svcType**:
+
+  - **Type**: VARCHAR(100)
   - **Description**: The type of service offered (e.g., shipping, account management). This field cannot be null.
 
-- **avgSvcTime**: 
-  - **Type**: INTEGER 
+- **avgSvcTime**:
+
+  - **Type**: INTEGER
   - **Description**: The average service time in minutes. This field cannot be null and remains constant once defined.
 
-- **svcName**: 
-  - **Type**: VARCHAR(100) 
+- **svcName**:
+  - **Type**: VARCHAR(100)
   - **Description**: A user-friendly name for the service (e.g., "Ship Letters", "Ship Parcels"). This field cannot be null.
 
 ---
 
 ### COUNTER_SERVICE (cid, sid, date)
-- **cid**: 
-  - **Type**: INTEGER 
+
+- **cid**:
+
+  - **Type**: INTEGER
   - **Description**: A foreign key referencing the **cid** in the COUNTER table, indicating which counter provides the service.
 
-- **sid**: 
-  - **Type**: INTEGER 
+- **sid**:
+
+  - **Type**: INTEGER
   - **Description**: A foreign key referencing the **sid** in the SERVICE table, indicating which service is being provided.
 
-- **date**: 
-  - **Type**: DATE 
+- **date**:
+
+  - **Type**: DATE
   - **Description**: The date when the service is provided, formatted as yyyy-mm-dd.
 
-- **PRIMARY KEY**: 
+- **PRIMARY KEY**:
+
   - **Description**: A composite primary key consisting of **(cid, sid, date)** to ensure each combination is unique.
 
-- **FOREIGN KEY**: 
-  - **Description**: 
+- **FOREIGN KEY**:
+  - **Description**:
     - **(cid)** references COUNTER(cid)
     - **(sid)** references SERVICE(sid)
 
 ---
 
 ### TICKET (tid, sid, cid, tCode, date, time, isServed, avgWaitTime)
-- **tid**: 
-  - **Type**: INTEGER 
+
+- **tid**:
+
+  - **Type**: INTEGER
   - **Description**: The unique identifier for each ticket (Primary Key). It is auto-incremented.
 
-- **sid**: 
-  - **Type**: INTEGER 
+- **sid**:
+
+  - **Type**: INTEGER
   - **Description**: A foreign key referencing the **sid** in the SERVICE table, indicating which service is associated with the ticket.
 
-- **cid**: 
-  - **Type**: INTEGER 
+- **cid**:
+
+  - **Type**: INTEGER
   - **Description**: A foreign key referencing the **cid** in the COUNTER table, indicating which counter is serving the ticket.
 
-- **tCode**: 
-  - **Type**: INTEGER 
+- **tCode**:
+
+  - **Type**: INTEGER
   - **Description**: The ticket code for the day, used to identify the ticket.
 
-- **date**: 
-  - **Type**: DATE 
+- **date**:
+
+  - **Type**: DATE
   - **Description**: The date the ticket is generated, formatted as yyyy-mm-dd.
 
-- **time**: 
-  - **Type**: TIME 
+- **time**:
+
+  - **Type**: TIME
   - **Description**: The time the ticket is generated, formatted as hh:mm:ss.
 
-- **isServed**: 
-  - **Type**: BOOLEAN 
+- **isServed**:
+
+  - **Type**: BOOLEAN
   - **Description**: Indicates whether the ticket has been served (1 if yes, 0 if no). Defaults to FALSE.
 
-- **avgWaitTime**: 
-  - **Type**: INTEGER 
+- **avgWaitTime**:
+
+  - **Type**: INTEGER
   - **Description**: The average wait time in minutes, to be calculated later.
 
-- **FOREIGN KEY**: 
-  - **Description**: 
+- **FOREIGN KEY**:
+  - **Description**:
     - **(sid)** references SERVICE(sid)
     - **(cid)** references COUNTER(cid)
-
 
 ## Main React Components
 
 ## Class diagram
 
-
-
 ## Screenshot
-
-

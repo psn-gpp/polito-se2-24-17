@@ -28,3 +28,32 @@ Content-Type: application/json
 ### delete a service using the id
 DELETE http://localhost:3001/api/services/2 HTTP/1.1
 
+
+#### Counter API Tests
+
+## Get all counters
+GET http://localhost:3001/api/counters HTTP/1.1
+
+### Get a specific counter by ID
+GET http://localhost:3001/api/counters/1 HTTP/1.1
+
+### Execute the insertion of a counter into the database
+POST http://localhost:3001/api/counters HTTP/1.1
+Content-Type: application/json
+
+{
+  "cName": "Counter 3"
+}
+
+### Update a specific counter by ID
+
+PUT http://localhost:3001/api/counters/3 HTTP/1.1
+Content-Type: application/json
+
+{
+  "cName": "Counter C"
+}
+
+### Delete a specific counter by ID
+DELETE http://localhost:3001/api/counters/3 HTTP/1.1
+
