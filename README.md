@@ -147,7 +147,6 @@
 - **Request Body:** (Content-Type: `application/json`)
   ```json
   {
-    "cid": 3,
     "cName": "Counter C"
   }
   ```
