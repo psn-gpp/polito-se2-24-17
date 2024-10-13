@@ -86,6 +86,7 @@ exports.deleteCounter = (cid) => {
 
 
 // auxiliary func
+// != getCounterById as it hides info since it does not return to the server all data about the counter, but only a boolean to indicate its existence
 /**
  * check if a counter exists
  * @param counterId - id of counter

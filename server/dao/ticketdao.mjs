@@ -101,7 +101,7 @@ const getLastTicketCode = () => {
   });
 }
 
-// PUT `/api/tickets/:tid/assignCounter`
+// PATCH `/api/tickets/:cid`
 /**
  * Given a ticket with ticketId and a computed value for the counter counterId which will serve the ticket, assign that counter to the ticket
  * @param {number} ticketId - unique id of ticket to update
@@ -124,7 +124,7 @@ const updateTicketAssignCounter = (ticketId,counterId) => {
   });
 };
 
-// PUT `/api/tickets/:tid/setServed`
+// PATCH `/api/tickets/:cid`
 /**
  * Given a ticket with ticketId, update that ticket as served
  * @param {number} ticketId - unique id of ticket to update
@@ -165,5 +165,28 @@ const deleteTicket = (ticketId) => {
   });
 };
 
-const ticketDao = {getAllTickets, getTicketById, createTicket, updateTicketAssignCounter, updateTicketSetServed, deleteTicket};
+// auxiliary func
+// != getTicketById as it hides info since it does not return to the server all data about the ticket, but only a boolean to indicate its existence
+
+/**
+ * check if a ticket exists
+ * @param ticketId - id of ticket
+ * @returns {Promise<boolean>} Promise resolving to a boolean : true if ticket exists, false otherwise
+ */
+const existsTicket = (ticketId) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT * FROM TICKET WHERE tid = ?";
+    db.get(query, [ticketId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row === undefined) {
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}
+
+const ticketDao = {getAllTickets, getTicketById, createTicket, updateTicketAssignCounter, updateTicketSetServed, deleteTicket, existsTicket};
 export default ticketDao;

@@ -103,12 +103,13 @@ To run the web app refer to the following step:
 
 ### **TICKETS**
 <!-- sample to fill -->
-<!-- ###  GET/POST/PUT/DELETE `/api/tickets/sth`
+<!-- ###  GET/POST/PUT/PATCH/DELETE `/api/tickets/sth`
 - **Description:** Do sth
 - **Request Parameters:** _None_.
 - **Request Body:** _None_
 - **Response:** Returns:
     - `200 OK` (success)
+    - `400 Bad Request` (invalid id)
     - `404 Not Found` (empty db) if entry `:id` is not present in db.
     - `422 Unprocessable Entity` (validation error).
     - `500 Internal Server Error` (generic error).
@@ -136,7 +137,7 @@ To run the web app refer to the following step:
       "cid": null,
       "tCode": 1,
       "date": "2024-10-01", // YYYY-MM-DD
-      "time": "09:45:10", // HH:MM:SS
+      "time": "09:45:10", // HH:mm:ss
       "isServed": 0,
       "avgWaitTime": null   // TODO in another story
     },
@@ -146,7 +147,7 @@ To run the web app refer to the following step:
       "cid": 1,
       "tCode": 2,
       "date": "2024-10-01", // YYYY-MM-DD
-      "time": "10:00:00", // HH:MM:SS
+      "time": "10:00:00", // HH:mm:ss
       "isServed": 1,
       "avgWaitTime": null  // TODO in another story
     },
@@ -205,31 +206,44 @@ To run the web app refer to the following step:
       "cid": null,
       "tCode": 1,
       "date": "2024-10-02", // YYYY-MM-DD
-      "time": "11:00:00", // HH:MM:SS
+      "time": "11:00:00", // HH:mm:ss
       "isServed": 0,
       "avgWaitTime": null   // TODO in another story, now left null
     }
   ```
 
-###  PUT `/api/tickets/:tid/setServed`
-- **Description:** Update ticket `:id` with data that the ticket is served
-- **Request Parameters:** `:tid` not empty, integer, >0.
-- **Request Body:** _None_.
+###  PATCH `/api/tickets/:cid`
+- **Description:** 
+1. Update a ticket (with `tid` in request body), set it as served on counter `cid`. If the request body is empty, no ticket is set as served, go to next step 2.
+2. Select next ticket to be served for counter `cid` and update that ticket with the counter `cid` info.
+- **Request Parameters:** `:cid` not empty, integer, >0.
+- **Request Body:**
+  ```json
+    {
+      "tid": 3
+    }
+  ```
+
+    OR
+
+    _None_
+
 - **Response:** Returns:
     - `200 OK` (success)
-    - `404 Not Found` (empty db) if ticket `:tid` is not present in db.
-    - `422 Unprocessable Entity` (validation error).
-    - `503 Service Unavailable` (generic error).
+    - `404 Not Found` (empty db) if entry `:cid` or entry `:tid` is not present in db.
+    - `422 Unprocessable Entity` (validation error) `:cid` and `:tid` should be not empty, integer, >0.
+    - `503 Service Unavailable` (generic error) internal db error or ticket with `:tid` to be set served has a counterId != req param `:cid`.
+
 - **Response Body:** (Content-Type: `application/json`)
   ```json
     {
-      "tid": 3,
+      "tid": 10,
       "sid": 3,
-      "cid": 2,
+      "cid": 1,
       "tCode": 1,
-      "date": "2024-10-02", // YYYY-MM-DD
-      "time": "11:00:00", // HH:MM:SS
-      "isServed": 1,
+      "date": "2024-10-03", // YYYY-MM-DD
+      "time": "09:00:00", // HH:mm:ss
+      "isServed": 0,
       "avgWaitTime": null   // TODO in another story, now left null
     }
   ```
@@ -244,32 +258,6 @@ To run the web app refer to the following step:
     - `422 Unprocessable Entity` (validation error).
     - `503 Service Unavailable` (generic error).
 - **Response Body:** _None_.
-
-### COUNTER APIs
-
-###  PUT `/api/counters/:cid/assignTicket`
-- **Description:** Assign to the counter `:cid` the next ticket to be served
-- **Request Parameters:** `:cid` not empty, integer, >0.
-- **Request Body:** _None_.
-- **Response:** Returns:
-    - `200 OK` (success)
-    - `404 Not Found` (empty db) if counter `:cid` is not present in db.
-    - `422 Unprocessable Entity` (validation error).
-    - `503 Service Unavailable` (generic error).
-- **Response Body:** (Content-Type: `application/json`)
-  ```json
-    {
-      "tid": 3,
-      "sid": 3,
-      "cid": 2,
-      "tCode": 1,
-      "date": "2024-10-02", // YYYY-MM-DD
-      "time": "11:00:00", // HH:MM:SS
-      "isServed": 0,
-      "avgWaitTime": null   // TODO in another story, now left null
-    }
-  ```
-
 
 ## Database Tables
 
@@ -345,11 +333,11 @@ To run the web app refer to the following step:
 
 - **date**: 
   - **Type**: DATE 
-  - **Description**: The date the ticket is generated, formatted as yyyy-mm-dd.
+  - **Description**: The date the ticket is generated, formatted as YYYY-MM-DD.
 
 - **time**: 
   - **Type**: TIME 
-  - **Description**: The time the ticket is generated, formatted as hh:mm:ss.
+  - **Description**: The time the ticket is generated, formatted as HH:mm:ss.
 
 - **isServed**: 
   - **Type**: BOOLEAN 

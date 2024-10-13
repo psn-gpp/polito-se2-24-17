@@ -93,6 +93,7 @@ exports.deleteService = (sid) => {
 };
 
 // auxiliary func
+// != getServiceById as it hides info since it does not return to the server all data about the service, but only a boolean to indicate its existence
 /**
  * check if a service exists
  * @param serviceId - id of service

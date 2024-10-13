@@ -139,36 +139,7 @@ export default app;
 // COUNTER APIs
 // ...
 
-// PUT `/api/counters/:cid/assignTicket`
-// for the moment, a ticket can be reassigned to another counter
-// TODO: if a ticket is already been assigned to a counter, that ticket cannot be assigned to another counter - implement that constraint!
-app.put('/api/counters/:cid/assignTicket', async (req, res) => {
-  const counterId = parseInt(req.params.cid);
 
-  // validate req params
-  if (!counterId || counterId<=0) {
-    return res.status(422).json({ error: `Invalid counter id ${req.params.cid}`});
-  }
-
-  try {
-    const exists = await counterdao.existsCounter(counterId);
-    if (!exists) {
-      return res.status(404).json({ error: `Counter id ${counterId} not found` });
-    }
-  } catch (err) {
-    return res.status(503).json({ error: err.message });
-  }
-
-  // TODO: implement alg to compute next ticket ticketId to assign to counter with counterId
-  let ticketId = 11;
-
-  try {
-    const ticketCounterAssigned = await ticketDao.updateTicketAssignCounter(ticketId, counterId);
-    return res.status(200).json(ticketCounterAssigned);
-  } catch (err) {
-    return res.status(503).json({ error: err.message });
-  }
-});
 // -----------------
 
 
@@ -234,21 +205,79 @@ app.post('/api/tickets', async (req, res) => {
 });
 
 
-// PUT `/api/tickets/:tid/setServed`
-app.put('/api/tickets/:tid/setServed', async (req, res) => {
-  const ticketId = parseInt(req.params.tid);
+// // PUT `/api/tickets/:tid/setServed`
+// app.put('/api/tickets/:tid/setServed', async (req, res) => {
+//   const ticketId = parseInt(req.params.tid);
 
+//   // validate req params
+//   if (!ticketId || ticketId<=0) {
+//     return res.status(422).json({ error: `Invalid ticket id ${req.params.tid}`});
+//   }
+
+//   try {
+//     const ticketSetServed = await ticketDao.updateTicketSetServed(ticketId);
+//     if (ticketSetServed.error) {
+//       return res.status(404).json({ error: ticketSetServed.error });
+//     }
+//     return res.status(200).json(ticketSetServed);
+//   } catch (err) {
+//     return res.status(503).json({ error: err.message });
+//   }
+// });
+
+
+// PATCH `/api/tickets/:cid`
+// at the moment, a ticket can be reassigned to another counter
+// TODO: if a ticket has already been assigned to a counter, that ticket cannot be assigned to another counter - implement that constraint!
+app.patch('/api/tickets/:cid', async (req, res) => {
+  const counterId = parseInt(req.params.cid);
   // validate req params
-  if (!ticketId || ticketId<=0) {
-    return res.status(422).json({ error: `Invalid ticket id ${req.params.tid}`});
+  if (!counterId || counterId<=0) {
+    return res.status(422).json({ error: `Invalid counter id ${req.params.cid}`});
   }
 
   try {
-    const ticketSetServed = await ticketDao.updateTicketSetServed(ticketId);
-    if (ticketSetServed.error) {
-      return res.status(404).json({ error: ticketSetServed.error });
+    // check if counterId exists in db
+    const existsC = await counterdao.existsCounter(counterId);
+    if (!existsC) {
+      return res.status(404).json({ error: `Counter id ${counterId} not found` });
     }
-    return res.status(200).json(ticketSetServed);
+
+    // check if request body is not empty, i.e. there is a tid inside request body
+    if (req.body.tid) {
+      const ticketId = parseInt(req.body.tid);
+      // validation of ticketId
+      if (!ticketId || ticketId < 0) {
+        return res.status(422).json({ error: `Invalid ticket id ${req.body.tid}`});
+      }
+
+      // check if ticketId exists in db
+      const existsT = await ticketDao.existsTicket(ticketId);
+      if (!existsT) {
+        return res.status(404).json({ error: `Ticket id ${ticketId} not found` });
+      }
+
+      // check if ticketId is served by counterId
+      const ticket = await ticketDao.getTicketById(ticketId);
+      // if yes, set ticketId as served
+      if (ticket.cid === counterId) {
+        const ticketSetServed = await ticketDao.updateTicketSetServed(ticketId);
+        if (ticketSetServed.error) {
+          return res.status(404).json({ error: ticketSetServed.error });
+        }
+      } else {
+        // else, return status code 503
+        return res.status(503).json({ error: `Ticket id ${ticketId} is NOT served by Counter id ${counterId}` });
+      }
+    }
+
+    // TODO: implement alg to compute next ticket nextTicketId to be served by counter counterId
+    let nextTicketId = 11;  // at the moment, hard-coded value for nextTicketId
+    const ticketCounterAssigned = await ticketDao.updateTicketAssignCounter(nextTicketId, counterId);
+    if (ticketCounterAssigned.error) {
+      return res.status(404).json({ error: ticketCounterAssigned.error });
+    }
+    return res.status(200).json(ticketCounterAssigned);
   } catch (err) {
     return res.status(503).json({ error: err.message });
   }
