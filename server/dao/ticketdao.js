@@ -1,7 +1,7 @@
 "use strict";
-import dayjs from 'dayjs';
-import Ticket from "../models/ticket.mjs";
-import db from "../db/db.js";
+const dayjs = require("dayjs");
+const Ticket = require("../models/ticket.js");
+const db = require("../db/db");
 
 // TICKET APIs
 /*
@@ -15,8 +15,9 @@ import db from "../db/db.js";
  * @param {} - no params
  * @returns {Promise<Ticket[]>} Promise resolving to an array of all Ticket objects in db
  */
-const getAllTickets = () => {
+exports.getAllTickets= () => {
   return new Promise((resolve, reject) => {
+    console.log("getAllTickets");
     const query = "SELECT * FROM TICKET";
     db.all(query, [], (err, rows) => {
       if (err) {
@@ -38,7 +39,8 @@ const getAllTickets = () => {
  * @param {number} ticketId - id of ticket for which to retieve all info
  * @returns {Promise<Ticket>} Promise resolving to that Ticket obj
  */
-const getTicketById = (ticketId) => {
+
+exports.getTicketById = (ticketId) => {
   return new Promise((resolve, reject) => {
     const query = "SELECT * FROM TICKET WHERE tid = ?";
     db.get(query, [ticketId], (err, row) => {
@@ -59,7 +61,7 @@ const getTicketById = (ticketId) => {
  * @param {number} serviceId - id of service associated with the ticket.
  * @returns {Promise<Ticket>} Promise resolving to the Ticket object of the newly created ticket.
  */
- const createTicket = (serviceId) => {
+exports.createTicket = (serviceId) => {
   return new Promise(async (resolve, reject) => {
     const lastTicketCode = await getLastTicketCode(); // retrieve most recent ticket code for today
     const avgWaitTime = null;   // TODO:  in another story, compute avg waiting time for ticket based on service type, min time to serve and number of people in queue
@@ -72,7 +74,7 @@ const getTicketById = (ticketId) => {
         if (err) {
           reject(err);
         } else {
-          const ticketInserted = await getTicketById(this.lastID);
+          const ticketInserted = await exports.getTicketById(this.lastID);
           resolve(ticketInserted);
         }
       }
@@ -85,7 +87,7 @@ const getTicketById = (ticketId) => {
  * retrive code of lastly genereated ticket today (the current date)
  * @returns {Promise<number>} Promise resolving to the code of lastly generated ticket
  */
-const getLastTicketCode = () => {
+exports.getLastTicketCode= () => {
   return new Promise((resolve, reject) => {
     const today = dayjs().format("YYYY-MM-DD").toString();
     const query = "SELECT MAX(tCode) AS lastTicketCode FROM TICKET WHERE date = ?";
@@ -108,7 +110,7 @@ const getLastTicketCode = () => {
  * @param {number} counterId - unique id of counter to assign to the ticket
  * @returns {Promise<Ticket>} Promise resolving to the updated Ticket obj
  */
-const updateTicketAssignCounter = (ticketId,counterId) => {
+exports.updateTicketAssignCounter = (ticketId,counterId) => {
   return new Promise((resolve, reject) => {
     const query =
       "UPDATE TICKET SET cid = ? WHERE tid = ?";
@@ -116,7 +118,7 @@ const updateTicketAssignCounter = (ticketId,counterId) => {
         if (err) {
           reject(err);
         } else {
-          const ticketCounterAssigned = await getTicketById(ticketId);
+          const ticketCounterAssigned = await exports.getTicketById(ticketId);
           resolve(ticketCounterAssigned);
         }
       }
@@ -130,7 +132,7 @@ const updateTicketAssignCounter = (ticketId,counterId) => {
  * @param {number} ticketId - unique id of ticket to update
  * @returns {Promise<Ticket>} Promise resolving to the updated Ticket obj
  */
-const updateTicketSetServed = (ticketId) => {
+exports.updateTicketSetServed = (ticketId) => {
   return new Promise((resolve, reject) => {
     const query =
       "UPDATE TICKET SET isServed = 1 WHERE tid = ?";
@@ -138,7 +140,7 @@ const updateTicketSetServed = (ticketId) => {
         if (err) {
           reject(err);
         } else {
-          const ticketSetServed = await getTicketById(ticketId);
+          const ticketSetServed = await exports.getTicketById(ticketId);
           resolve(ticketSetServed);
         }
       }
@@ -152,7 +154,7 @@ const updateTicketSetServed = (ticketId) => {
  * @param {number} ticketId - id of ticket to be deleted
  * @returns {Promise<{ tid: number }>} Promise resolving to an object with field "ok" containing the number of changes
  */
-const deleteTicket = (ticketId) => {
+exports.deleteTicket= (ticketId) => {
   return new Promise((resolve, reject) => {
     const query = "DELETE FROM TICKET WHERE tid = ?";
     db.run(query, [ticketId], function (err) {
@@ -173,7 +175,7 @@ const deleteTicket = (ticketId) => {
  * @param ticketId - id of ticket
  * @returns {Promise<boolean>} Promise resolving to a boolean : true if ticket exists, false otherwise
  */
-const existsTicket = (ticketId) => {
+exports.existsTicket = (ticketId) => {
   return new Promise((resolve, reject) => {
     const query = "SELECT * FROM TICKET WHERE tid = ?";
     db.get(query, [ticketId], (err, row) => {
@@ -187,6 +189,3 @@ const existsTicket = (ticketId) => {
     });
   });
 }
-
-const ticketDao = {getAllTickets, getTicketById, createTicket, updateTicketAssignCounter, updateTicketSetServed, deleteTicket, existsTicket};
-export default ticketDao;

@@ -3,7 +3,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import ticketDao from './dao/ticketdao.mjs';
+import ticketDao from './dao/ticketdao.js';
 import counterdao from './dao/counterdao.js';
 import servicedao from './dao/servicedao.js';
 
@@ -154,6 +154,7 @@ export default app;
 // GET `/api/tickets`
 app.get('/api/tickets', async (req, res) => {
   try {
+    console.log('GET /api/tickets');
     const tickets = await ticketDao.getAllTickets();
     return res.status(200).json(tickets);
   } catch (err) {

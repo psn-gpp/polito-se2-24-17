@@ -9,4 +9,4 @@ function Ticket(tid, sid, cid, tCode, date, time, isServed, avgWaitTime) {
     this.avgWaitTime = avgWaitTime;
 }
 
-export default Ticket;
+module.exports = Ticket;

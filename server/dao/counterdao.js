@@ -3,10 +3,12 @@
 const db = require("../db/db");
 
 //COUNTER API
-/**
- * giving a service id, return the counter object
- */
 
+/**
+ * Retrieves a counter by its ID.
+ * @param {number} counterId - The ID of the counter to retrieve.
+ * @returns {Promise<Object>} A promise that resolves to the counter object.
+ */
 exports.getCounterById = (counterId) => {
   return new Promise((resolve, reject) => {
     const query = "SELECT * FROM COUNTER WHERE cid = ?";
@@ -20,9 +22,9 @@ exports.getCounterById = (counterId) => {
   });
 };
 /**
- * return the all the counters
+ * Retrieves all counters.
+ * @returns {Promise<Array>} A promise that resolves to an array of all counters.
  */
-
 exports.getAllCounters = () => {
   return new Promise((resolve, reject) => {
     const query = "SELECT * FROM COUNTER";
@@ -36,9 +38,10 @@ exports.getAllCounters = () => {
   });
 };
 /**
- * create a new counter taking the two parameter and return the counter id
+ * Creates a new counter.
+ * @param {string} cName - The name of the counter to create.
+ * @returns {Promise<Object>} A promise that resolves to an object containing the new counter's ID.
  */
-
 exports.createCounter = (cName) => {
   return new Promise((resolve, reject) => {
     const query = "INSERT INTO COUNTER (cName) VALUES (?)";
@@ -52,9 +55,11 @@ exports.createCounter = (cName) => {
   });
 };
 /**
- * update a counter taking the counter id and the two parameter and return the number of changes(discuss)
+ * Updates a counter.
+ * @param {number} cid - The ID of the counter to update.
+ * @param {string} cName - The new name of the counter.
+ * @returns {Promise<Object>} A promise that resolves to an object containing the number of changes.
  */
-
 exports.updateCounter = (cid, cName) => {
   return new Promise((resolve, reject) => {
     const query = "UPDATE COUNTER SET cName = ? WHERE cid = ?";
@@ -68,9 +73,10 @@ exports.updateCounter = (cid, cName) => {
   });
 };
 /**
- * delete a counter taking the counter id and return the number of changes(discuss)
+ * Deletes a counter.
+ * @param {number} cid - The ID of the counter to delete.
+ * @returns {Promise<Object>} A promise that resolves to an object containing the number of changes.
  */
-
 exports.deleteCounter = (cid) => {
   return new Promise((resolve, reject) => {
     const query = "DELETE FROM COUNTER WHERE cid = ?";
@@ -83,14 +89,10 @@ exports.deleteCounter = (cid) => {
     });
   });
 };
-
-
-// auxiliary func
-// != getCounterById as it hides info since it does not return to the server all data about the counter, but only a boolean to indicate its existence
 /**
- * check if a counter exists
- * @param counterId - id of counter
- * @returns {Promise<boolean>} Promise resolving to a boolean : true if counter exists, false otherwise
+ * Checks if a counter exists.
+ * @param {number} counterId - The ID of the counter to check.
+ * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the counter exists.
  */
 exports.existsCounter = (counterId) => {
   return new Promise((resolve, reject) => {

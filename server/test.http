@@ -1,7 +1,7 @@
 ## Service API Tests
 
 ## Get a service id 
-GET http://localhost:3001/api/services/2 HTTP/1.1
+GET http://localhost:3001/api/services/9 HTTP/1.1
 
 ## Execute the insertion of a service on db
 POST http://localhost:3001/api/services HTTP/1.1
@@ -39,7 +39,7 @@ GET http://localhost:3001/api/tickets
 ### -----------------------------
 
 ### get a ticket with existing tid - ok
-GET http://localhost:3001/api/tickets/7
+GET http://localhost:3001/api/tickets/8
 # 200 OK
 # {
 #   "tid": 7,
