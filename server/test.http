@@ -1,9 +1,7 @@
-
-
 ## Service API Tests
 
 ## Get a service id 
-GET http://localhost:3001/api/services/2 HTTP/1.1
+GET http://localhost:3001/api/services/9 HTTP/1.1
 
 ## Execute the insertion of a service on db
 POST http://localhost:3001/api/services HTTP/1.1
@@ -57,3 +55,355 @@ Content-Type: application/json
 ### Delete a specific counter by ID
 DELETE http://localhost:3001/api/counters/3 HTTP/1.1
 
+
+### *****************************
+### TICKET APIs test
+### *****************************
+
+### get all tickets - ok
+GET http://localhost:3001/api/tickets
+# 200 OK
+# list of tickets [ {}, {}, ... {}]
+
+### -----------------------------
+
+### get a ticket with existing tid - ok
+GET http://localhost:3001/api/tickets/8
+# 200 OK
+# {
+#   "tid": 7,
+#   "sid": 1,
+#   "cid": null,
+#   "tCode": 1,
+#   "date": "2024-10-01",
+#   "time": "10:05:00",
+#   "isServed": "FALSE",
+#   "avgWaitTime": null
+# }
+
+
+### get a ticket with a non-existing tid
+GET http://localhost:3001/api/tickets/2
+# 404 Not Found
+# {
+#   "error": "ticket id 2 not found"
+# }
+
+
+### get a ticket with an invalid tid != number
+GET http://localhost:3001/api/tickets/abc
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id abc"
+# }
+
+
+### get a ticket with an invalid tid <0
+GET http://localhost:3001/api/tickets/-2
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id -2"
+# }
+
+
+### get a ticket with an invalid tid ==0
+GET http://localhost:3001/api/tickets/0
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id 0"
+# }
+
+### -----------------------------
+
+### insert a new ticket in db with exisiting service id - ok
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": 3
+}
+
+# 200 OK
+# {
+#   "tid": 14,
+#   "sid": 3,
+#   "cid": null,
+#   "tCode": 4,
+#   "date": "2024-10-13",
+#   "time": "21:10:17",
+#   "isServed": 0,
+#   "avgWaitTime": null
+# }
+
+
+### insert a new ticket in db with non-exisiting service id
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": 10
+}
+
+# 404 Not Found
+# {
+#   "error": "Service id 10 not found"
+# }
+
+
+### insert a new ticket in db with invalid service id != number
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": "abc"
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid service id abc"
+# }
+
+
+### insert a new ticket in db with invalid service id <0
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": -3
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid service id -3"
+# }
+
+
+### insert a new ticket in db with invalid service id =0
+POST http://localhost:3001/api/tickets
+Content-Type: application/json
+
+{
+  "sid": 0
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid service id 0"
+# }
+
+### -----------------------------
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+PATCH http://localhost:3001/api/tickets/2
+Content-Type: application/json
+
+{
+  "tid": 9
+}
+
+# 200 OK
+# {
+#   "tid": 11,
+#   "sid": 3,
+#   "cid": 2,
+#   "tCode": 1,
+#   "date": "2024-10-13",
+#   "time": "21:05:42",
+#   "isServed": 0,
+#   "avgWaitTime": null
+# }
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### invalid cid != number
+PATCH http://localhost:3001/api/tickets/abc
+Content-Type: application/json
+
+{
+  "tid": 9
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid counter id abc"
+# }
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### invalid cid <0
+PATCH http://localhost:3001/api/tickets/-2
+Content-Type: application/json
+
+{
+  "tid": 9
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid counter id -2"
+# }
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### invalid cid ==0
+PATCH http://localhost:3001/api/tickets/0
+Content-Type: application/json
+
+{
+  "tid": 9
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid counter id 0"
+# }
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### non-existent cid
+PATCH http://localhost:3001/api/tickets/100
+Content-Type: application/json
+
+{
+  "tid": 9
+}
+
+# 404 Not Found
+# {
+#   "error": "Counter id 100 not found"
+# }
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### non-existent tid
+PATCH http://localhost:3001/api/tickets/1
+Content-Type: application/json
+
+{
+  "tid": 100
+}
+
+# 404 Not Found
+# {
+#   "error": "Ticket id 100 not found"
+# }
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### invalid tid != number
+PATCH http://localhost:3001/api/tickets/1
+Content-Type: application/json
+
+{
+  "tid": "pqr"
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id pqr"
+# }
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### invalid tid <0
+PATCH http://localhost:3001/api/tickets/1
+Content-Type: application/json
+
+{
+  "tid": -5
+}
+
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id -5"
+# }
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### invalid tid ==0
+PATCH http://localhost:3001/api/tickets/1
+Content-Type: application/json
+
+{
+  "tid": 0
+}
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### tid to be set as served has a counterId != req param cid
+PATCH http://localhost:3001/api/tickets/1
+Content-Type: application/json
+
+{
+  "tid": 9
+}
+
+# 503 Service Unavailable
+# {
+#   "error": "Ticket id 9 is NOT served by Counter id 1"
+# }
+
+
+
+### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid
+### no tid in req body, directly compute next ticket to be served and assign cid to it
+PATCH http://localhost:3001/api/tickets/1
+Content-Type: application/json
+
+# 200 OK
+# {
+#   "tid": 11,
+#   "sid": 3,
+#   "cid": 1,
+#   "tCode": 1,
+#   "date": "2024-10-13",
+#   "time": "21:05:42",
+#   "isServed": 0,
+#   "avgWaitTime": null
+# }
+
+### -----------------------------
+
+### delete a ticket with tid - ok
+DELETE http://localhost:3001/api/tickets/7
+# 200 OK
+
+
+### delete a ticket with non-existent tid
+DELETE http://localhost:3001/api/tickets/7
+# 404 Not Found
+# {
+#   "error": "Ticket id 7 not found"
+# }
+
+
+### delete a ticket with invalid tid != number
+DELETE http://localhost:3001/api/tickets/xyz
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id xyz"
+# }
+
+
+### delete a ticket with invalid tid <0
+DELETE http://localhost:3001/api/tickets/-4
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id -4"
+# }
+
+
+### delete a ticket with invalid tid == 0
+DELETE http://localhost:3001/api/tickets/0
+# 422 Unprocessable Entity
+# {
+#   "error": "Invalid ticket id 0"
+# }
