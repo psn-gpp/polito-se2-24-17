@@ -17,6 +17,16 @@ To run the web app refer to the following step:
 
 - Open a browser window, in the URL field, type `http://localhost:5173/` and press Enter. The client is loaded. The user can interact with the server through the client.
 
+## How to test the backend API's app
+
+- Open a terminal
+
+- In the terminal, type the following commands:
+  - `cd server`
+  - Decide what you want to test between counter, service, and ticket, then run the appropriate command (for example, to test services):
+    - `npm test service`
+  - You will see the total time taken to execute these tests and the different API calls.
+
 ## React Client Application Routes
 
 - Route `/`: Home page of the queue system, shows buttons to choose the role of the user (customer, manager, officer), redirects to Route `/customer` or `/manager` or `/officer` based on the selected role
@@ -29,7 +39,7 @@ To run the web app refer to the following step:
 
 ## APIs Server
 
-### **SERVICES**
+### **SERVICES APIs**
 
 ### GET `/api/services`
 
@@ -109,25 +119,8 @@ To run the web app refer to the following step:
 - **Request Body:** No body required.
 - **Response:** Returns 200 OK (success), 400 Bad Request (invalid ID), 404 Not Found (service not found), or 500 Internal Server Error (generic error).
 
-### **TICKETS**
-<!-- sample to fill -->
-<!-- ###  GET/POST/PUT/PATCH/DELETE `/api/tickets/sth`
-- **Description:** Do sth
-- **Request Parameters:** _None_.
-- **Request Body:** _None_
-- **Response:** Returns:
-    - `200 OK` (success)
-    - `400 Bad Request` (invalid id)
-    - `404 Not Found` (empty db) if entry `:id` is not present in db.
-    - `422 Unprocessable Entity` (validation error).
-    - `500 Internal Server Error` (generic error).
-    - `503 Service Unavailable` (generic error).
 
-- **Response Body:** (Content-Type: `application/json`)
-  ```json
-    {
-    }
-  ``` -->
+### **TICKETS APIs**
 
 ###  GET `/api/tickets`
 - **Description:** Retrieve all tickets in database
@@ -266,7 +259,8 @@ To run the web app refer to the following step:
     - `422 Unprocessable Entity` (validation error).
     - `503 Service Unavailable` (generic error).
 - **Response Body:** _None_.
-### COUNTER APIs
+
+### **COUNTER APIs**
 
 ### GET `/api/counters`
 

@@ -138,7 +138,6 @@ app.delete("/api/services/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" }); // Handle server errors
   }
 });
-export default app;
 
 // COUNTER API
 
@@ -233,28 +232,11 @@ app.delete("/api/counters/:id", async (req, res) => {
   }
 });
 
-// COUNT SERVICE API
-
-// TICKET API
-// COUNTER APIs
-// ...
-
-
-// -----------------
-
-
-// COUNTER SERVICE API
-// ...
-
-// -----------------
-
-
 // TICKET APIs
 
 // GET `/api/tickets`
 app.get('/api/tickets', async (req, res) => {
   try {
-    console.log('GET /api/tickets');
     const tickets = await ticketDao.getAllTickets();
     return res.status(200).json(tickets);
   } catch (err) {
@@ -265,7 +247,6 @@ app.get('/api/tickets', async (req, res) => {
 // GET `/api/tickets/:tid`
 app.get('/api/tickets/:tid',  async (req, res) => {
   const ticketId = parseInt(req.params.tid); 
-
   // validate req params
   if (!ticketId || ticketId<=0) {
     return res.status(422).json({ error: `Invalid ticket id ${req.params.tid}`});
@@ -416,7 +397,7 @@ app.delete('/api/tickets/:tid', async (req, res) => {
   }
 });
 
-// -----
+
 
 const server = app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

@@ -63,7 +63,7 @@ exports.getTicketById = (ticketId) => {
  */
 exports.createTicket = (serviceId) => {
   return new Promise(async (resolve, reject) => {
-    const lastTicketCode = await getLastTicketCode(); // retrieve most recent ticket code for today
+    const lastTicketCode = await exports.getLastTicketCode(); // retrieve most recent ticket code for today
     const avgWaitTime = null;   // TODO:  in another story, compute avg waiting time for ticket based on service type, min time to serve and number of people in queue
     const today = dayjs().format("YYYY-MM-DD").toString();  // date of ticket generation (format: 'YYYY-MM-DD')
     const time = dayjs().format("HH:mm:ss").toString();   // time stamp of ticket generation (format: 'HH:mm:ss'): HH for 00-23, mm for 00-59, ss for 00-59
