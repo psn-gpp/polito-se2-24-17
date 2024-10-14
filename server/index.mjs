@@ -308,9 +308,10 @@ app.post('/api/tickets', async (req, res) => {
 // });
 
 
+//guardare che richiamo prima volta assegna e ok
+//se la seconda volta setta prima atrue e poi prende il prossimo nello stesso giorno
+
 // PATCH `/api/tickets/:cid`
-// at the moment, a ticket can be reassigned to another counter
-// TODO: if a ticket has already been assigned to a counter, that ticket cannot be assigned to another counter - implement that constraint!
 app.patch('/api/tickets/:cid', async (req, res) => {
   const counterId = parseInt(req.params.cid);
   
@@ -351,8 +352,19 @@ app.patch('/api/tickets/:cid', async (req, res) => {
         if (ticketSetServed.error) {
           return res.status(404).json({ error: ticketSetServed.error });
         }
-        return res.status(200).json({ message: `Ticket id ${ticketId} marked as served`, ticket: ticketSetServed });
-      } else {
+
+        // call the next ticket for the counter
+        let nextTicket = await ticketDao.getNextTicket();
+        if (nextTicket.error) {
+          return res.status(404).json({ error: nextTicket.error });
+        }
+        const ticketCounterAssigned = await ticketDao.updateTicketAssignCounter(nextTicket.tid, counterId);
+        //console.log(ticketCounterAssigned);
+        if (ticketCounterAssigned.error) {
+          return res.status(404).json({ error: ticketCounterAssigned.error });
+        }
+    return res.status(200).json({ message: `Next ticket id ${nextTicket.tid} assigned to counter id ${counterId}`, ticket: ticketCounterAssigned });
+    } else {
         // If the ticket is not yet assigned to this counter, assign it
         const ticketAssigned = await ticketDao.updateTicketAssignCounter(ticketId, counterId);
         if (ticketAssigned.error) {
@@ -361,15 +373,7 @@ app.patch('/api/tickets/:cid', async (req, res) => {
         return res.status(200).json({ message: `Ticket id ${ticketId} assigned to counter id ${counterId}`, ticket: ticketAssigned });
       }
     }
-
-    // If no ticket ID provided, assign the next available ticket to the counter
-    // TODO: implement the logic to find the next ticket to be served by counter
-    let nextTicketId = 11; // Hardcoded for now, implement the logic here
-    const ticketCounterAssigned = await ticketDao.updateTicketAssignCounter(nextTicketId, counterId);
-    if (ticketCounterAssigned.error) {
-      return res.status(404).json({ error: ticketCounterAssigned.error });
-    }
-    return res.status(200).json({ message: `Next ticket id ${nextTicketId} assigned to counter id ${counterId}`, ticket: ticketCounterAssigned });
+    
     
   } catch (err) {
     return res.status(503).json({ error: err.message });
