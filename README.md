@@ -439,6 +439,25 @@ To run the web app refer to the following step:
 
 ## Main React Components
 
+### Main
+The `Main` component serves as the landing page for the queue management system. It presents users with three role options: Manager, Officer, and Customer. Each button navigates to the respective dashboard, and there is also a button for accessing the Display Board. The layout is responsive and styled using React-Bootstrap for a clean user experience.
+
+### Home
+The `Home` component acts as a routing wrapper that directs users to the `Main` component when they visit the home page. It ensures users can select their role and proceed to the appropriate section of the application.
+
+### CustomerDashboard
+The `CustomerDashboard` component allows customers to select a service from a list, including options such as "Ship A Parcel," "Track A Parcel," and more. The selected service is highlighted, and users can confirm their choice via a modal prompt. Additionally, a cancel button navigates them back to the home page.
+
+### OfficerDashboard
+The `OfficerDashboard` component provides a user-friendly interface for officers to select available counters. It features a dropdown menu for counter selection, accompanied by confirm and cancel buttons, allowing for efficient navigation through the counter management process.
+
+### ManagerDashboard
+The `ManagerDashboard` component is currently a placeholder for future functionalities aimed at managing and overseeing queue operations. This component will eventually include tools and features tailored for managers to facilitate effective queue management.
+
+### Default
+The `DefaultRoute` component is displayed when users attempt to access an undefined route. It informs users that the requested page does not exist and provides a button to navigate back to the home page.
+
+
 ## Class diagram
 
 ## Screenshot
