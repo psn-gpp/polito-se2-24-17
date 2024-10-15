@@ -1,16 +1,16 @@
-
 import MyMain from "./Main";
 import MyNavbar from './MyNavbar';
+import React from "react";
 
-function HomeRoute() {
+function Home() {
 
     return (
         <>
-            <MyNavbar/>
+            <MyNavbar />
             <MyMain />
         </>
 
     );
 }
 
-export default HomeRoute;
+export default Home;

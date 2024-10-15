@@ -1,17 +1,16 @@
-// src/components/ManagerDashboard.jsx
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-function ManagerDashboard() {
+function DisplayDashBoard() {
     const navigate = useNavigate();
 
     return (
         <Container>
             <Row>
                 <Col>
-                    <h1>Manager Dashboard</h1>
-                    {/* Add manager functionalities here */}
+                    <h1>Display Dashboard</h1>
+                    {/* Add display functionalities here */}
 
                 </Col>
             </Row>
@@ -19,4 +18,4 @@ function ManagerDashboard() {
     );
 }
 
-export default ManagerDashboard; // Ensure this line is present
+export default DisplayDashBoard; // Ensure this line is present

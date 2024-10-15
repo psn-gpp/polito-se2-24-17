@@ -1,26 +1,25 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import DefaultRoute from './components/DefaultRoute';
-import HomeRoute from './components/HomeRoute';
-import CustomerDashboard from './components/CustomerDashboard';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Default from './components/Default';
+import Home from './components/Home';
 import ManagerDashboard from './components/ManagerDashboard';
 import OfficerDashboard from './components/OfficerDashboard';
-import NotFound from './components/NotFound';
+import CustomerDashboard from './components/CustomerDashboard';
+import DisplayDashboard from './components/DisplayBoard';
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<HomeRoute />} />
-        <Route path='/*' element={<DefaultRoute />} />
-        {/* Define routes for different user dashboards */}
-        <Route path='/customer' element={<CustomerDashboard />} />
-        <Route path='/manager' element={<ManagerDashboard />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/*' element={<Default />} />
+        <Route path='/manager' element={<Default />} />
         <Route path='/officer' element={<OfficerDashboard />} />
-        {/* Handle undefined routes */}
-        <Route path='*' element={<NotFound />} />
+        <Route path='/customer' element={<CustomerDashboard />} />
+        <Route path='/display' element={<Default />} />
       </Routes>
     </BrowserRouter>
   );
