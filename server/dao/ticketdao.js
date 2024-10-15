@@ -166,10 +166,6 @@ exports.deleteTicket= (ticketId) => {
     });
   });
 };
-
-// auxiliary func
-// != getTicketById as it hides info since it does not return to the server all data about the ticket, but only a boolean to indicate its existence
-
 /**
  * check if a ticket exists
  * @param ticketId - id of ticket
@@ -189,3 +185,50 @@ exports.existsTicket = (ticketId) => {
     });
   });
 }
+/**
+ * Function use to implement the algorithm to get the next ticket to be served
+ */
+exports.getNextTicket = () => {
+  let svgTime= 999;
+  let dimqueue = 0;
+  let serviceId = 0;
+  let now = dayjs().format("YYYY-MM-DD").toString();
+  return new Promise((resolve, reject) => {
+    // take only the tickets that are not served and that are not assigned to a counter
+    const query = "SELECT T.Sid, svcType, svcName, avgSvcTime, COUNT(*) as QueueLenSVC FROM TICKET T, SERVICE S WHERE T.sid = S.sid AND isServed = 0 AND date = ? AND cid is NULL GROUP BY T.sid, svcType, svcName;";
+    db.all(query, [now], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else if (rows.length === 0) {
+        resolve({error: `No tickets in the queue`});
+      }
+      else {
+        const queues = rows.map(t => ({sid: t.sid, svcType: t.svcType, svcName: t.svcName, avgSvcTime: t.avgSvcTime, QueueLenSVC: t.QueueLenSVC}));
+        for (const queue of queues) {
+          if(queue.QueueLenSVC > dimqueue){
+            dimqueue = queue.QueueLenSVC;
+            svgTime = queue.avgSvcTime;
+            serviceId = queue.sid;
+          }
+          else if(queue.QueueLenSVC === dimqueue){
+            if(queue.avgSvcTime < svgTime){
+              svgTime = queue.avgSvcTime;
+              serviceId = queue.sid;
+            }
+          }
+        }
+        // i got now the queue with the smallest average service time
+        const query2 = "SELECT * FROM TICKET WHERE sid = ? AND isServed = 0 AND cid is NULL AND date = ? ORDER BY tCode ASC LIMIT 1";
+        db.get(query2, [serviceId,now], (err, row) => {
+          if (err) {
+            reject(err);
+          } else if (row === undefined) {
+            resolve({error: `No tickets in the queue`});
+          } else {
+            resolve(new Ticket(row.tid, row.sid, row.cid, row.tCode, row.date, row.time, row.isServed, row.avgWaitTime));
+          }
+        });
+      }
+  });
+  });
+};
