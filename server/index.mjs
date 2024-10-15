@@ -323,6 +323,7 @@ app.patch('/api/tickets/:cid', async (req, res) => {
   try {
     // Check if counterId exists in the database
     const existsC = await counterdao.existsCounter(counterId);
+    
     if (!existsC) {
       return res.status(404).json({ error: `Counter id ${counterId} not found` });
     }
@@ -352,34 +353,24 @@ app.patch('/api/tickets/:cid', async (req, res) => {
         if (ticketSetServed.error) {
           return res.status(404).json({ error: ticketSetServed.error });
         }
-
-        // call the next ticket for the counter
-        let nextTicket = await ticketDao.getNextTicket();
-        if (nextTicket.error) {
-          return res.status(404).json({ error: nextTicket.error });
-        }
-        const ticketCounterAssigned = await ticketDao.updateTicketAssignCounter(nextTicket.tid, counterId);
-        //console.log(ticketCounterAssigned);
-        if (ticketCounterAssigned.error) {
-          return res.status(404).json({ error: ticketCounterAssigned.error });
-        }
-    return res.status(200).json({ message: `Next ticket id ${nextTicket.tid} assigned to counter id ${counterId}`, ticket: ticketCounterAssigned });
-    } else {
-        // If the ticket is not yet assigned to this counter, assign it
-        const ticketAssigned = await ticketDao.updateTicketAssignCounter(ticketId, counterId);
-        if (ticketAssigned.error) {
-          return res.status(400).json({ error: ticketAssigned.error });
-        }
-        return res.status(200).json({ message: `Ticket id ${ticketId} assigned to counter id ${counterId}`, ticket: ticketAssigned });
       }
     }
-    
-    
-  } catch (err) {
-    return res.status(503).json({ error: err.message });
-  }
-});
-
+    // get the next ticket for the counter
+    const nextTicket = await ticketDao.getNextTicket();
+    if (nextTicket.error) {
+        return res.status(404).json({ error: nextTicket.error });
+    }
+    const ticketCounterAssigned = await ticketDao.updateTicketAssignCounter(nextTicket.tid, counterId);
+      //console.log(ticketCounterAssigned);
+    if (ticketCounterAssigned.error) {
+        return res.status(404).json({ error: ticketCounterAssigned.error });
+    }
+      return res.status(200).json({ message: `Next ticket id ${nextTicket.tid} assigned to counter id ${counterId}`, ticket: ticketCounterAssigned });
+    }
+    catch (err) {
+      return res.status(503).json({ error: err.message });
+    }
+  });
 
 // DELETE `/api/tickets/:tid`
 app.delete('/api/tickets/:tid', async (req, res) => {

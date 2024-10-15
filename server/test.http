@@ -198,7 +198,7 @@ PATCH http://localhost:3001/api/tickets/2
 Content-Type: application/json
 
 {
-  "tid": 44
+  "tid": 14
 }
 
 # 200 OK
