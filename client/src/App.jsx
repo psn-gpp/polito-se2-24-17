@@ -9,6 +9,7 @@ import OfficerDashboard from './components/OfficerDashboard';
 import CustomerDashboard from './components/CustomerDashboard';;
 import DisplayBoard from './components/DisplayBoard';
 import TicketDisplay from './components/TicketDisplay';
+import CounterView from './components/CounterView';
 
 
 function App() {
@@ -19,9 +20,10 @@ function App() {
         <Route path='/*' element={<Default />} />
         <Route path='/manager' element={<Default />} />
         <Route path='/officer' element={<OfficerDashboard />} />
+        <Route path='/officer/:counterId' element={<CounterView />} />
         <Route path='/customer' element={<CustomerDashboard />} />
-        <Route path='/display' element={<DisplayBoard />} />
         <Route path='/customer/ticket' element={<TicketDisplay />} />
+        <Route path='/display' element={<DisplayBoard />} />
       </Routes>
     </BrowserRouter>
   );

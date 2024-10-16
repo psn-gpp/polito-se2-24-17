@@ -41,18 +41,20 @@ function CustomerDashboard() {
     return (
         <Container>
             <h2>Select a Service</h2>
-            <ListGroup>
-                {services.map((service, index) => (
-                    <ListGroup.Item
-                        action
-                        key={index}
-                        active={selectedService === service}
-                        onClick={() => setSelectedService(service)}
-                    >
-                        {service}
-                    </ListGroup.Item>
-                ))}
-            </ListGroup>
+            <div style={{ width: '400px', margin: '0 auto' }}>
+                <ListGroup>
+                    {services.map((service, index) => (
+                        <ListGroup.Item
+                            action
+                            key={index}
+                            active={selectedService === service}
+                            onClick={() => setSelectedService(service)}
+                        >
+                            {service}
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
+            </div>
 
             <Row className="my-3">
                 <Col>

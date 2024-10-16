@@ -29,7 +29,6 @@ function Default() {
                 <Col></Col>
             </Row>
         </Container>
-
     );
 }
 

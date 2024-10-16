@@ -13,11 +13,8 @@ function OfficerDashboard() {
     const handleConfirm = () => {
         // Handle the confirm action, e.g., navigating to the selected counter's page
         console.log('Selected Counter:', selectedCounter);
+        navigate(`/officer/${selectedCounter}`);
     };
-
-    // const handleCancel = () => {
-    //     setSelectedCounter('');
-    // };
 
     return (
         <Container className="mt-5">
@@ -35,7 +32,8 @@ function OfficerDashboard() {
                                     <Dropdown.Item onClick={() => handleCounterSelect('Counter 1')}>Counter 1</Dropdown.Item>
                                     <Dropdown.Item onClick={() => handleCounterSelect('Counter 2')}>Counter 2</Dropdown.Item>
                                     <Dropdown.Item onClick={() => handleCounterSelect('Counter 3')}>Counter 3</Dropdown.Item>
-                                    {/* Add more counters as needed */}
+                                    <Dropdown.Item onClick={() => handleCounterSelect('Counter 4')}>Counter 4</Dropdown.Item>
+                                    {/* we can add more counters as needed it will be fetched from backend dynamically too*/}
                                 </Dropdown.Menu>
                             </Dropdown>
                             <div className="mt-3">

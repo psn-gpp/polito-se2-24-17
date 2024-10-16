@@ -3,7 +3,7 @@ import { Container, Row, Col, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 function DisplayBoard() {
-    // Example data for customers being served, we can replace the hardcoded data with a dynamic array
+    // Example data for customers being served, we can replace the hardcoded data with a dynamic array from backend/db
     const servedCustomers = [
         { ticketCode: 'A001', counterNumber: 1 },
         { ticketCode: 'A002', counterNumber: 2 },

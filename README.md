@@ -31,6 +31,7 @@ To run the web app refer to the following step:
 
 - Route `/`: Home page of the queue system, shows buttons to choose the role of the user (customer, manager, officer), redirects to Route `/customer` or `/manager` or `/officer` based on the selected role
 - Route `/customer`: route for customer view of servise selection, shows a list of options with available services from one option should be selected
+- Route `/customer/ticket`: route for generating a ticket with the selected service and where the customer can print/download the ticket
 - Route `/display`: route for display board view, shows a list of pairs (ticket code, counter number) for those customers who are called and are currently being served
 - Route `/manager`: route for manager view, shows a page with functionalities offered to manager (@ the moment, blank page)
 - Route `/officer`: route for officer view, shows a list of available counters from to select one, redirects to Route `/officer/:counterId`
@@ -448,16 +449,25 @@ The `Home` component acts as a routing wrapper that directs users to the `Main` 
 ### CustomerDashboard
 The `CustomerDashboard` component allows customers to select a service from a list, including options such as "Ship A Parcel," "Track A Parcel," and more. The selected service is highlighted, and users can confirm their choice via a modal prompt. Additionally, a cancel button navigates them back to the home page.
 
+### TicketDisplay
+
+The `TicketDisplay` component presents the ticket information to the user, including service type, ticket number and along with a QR code. It includes a print button for easy ticket printing.
+
 ### OfficerDashboard
 The `OfficerDashboard` component provides a user-friendly interface for officers to select available counters. It features a dropdown menu for counter selection, accompanied by confirm and cancel buttons, allowing for efficient navigation through the counter management process.
+
+### CounterView
+
+The `CounterView` component displays details of the currently served customer, such as ticket code, service type, and service time. It also features a button for the officer to call the next customer, streamlining service delivery.
 
 ### ManagerDashboard
 The `ManagerDashboard` component is currently a placeholder for future functionalities aimed at managing and overseeing queue operations. This component will eventually include tools and features tailored for managers to facilitate effective queue management.
 
 ### Default
-The `DefaultRoute` component is displayed when users attempt to access an undefined route. It informs users that the requested page does not exist and provides a button to navigate back to the home page.
+The `Default` component is displayed when users attempt to access an undefined route. It informs users that the requested page does not exist and provides a button to navigate back to the home page.
 
 
 ## Class diagram
+
 
 ## Screenshot
