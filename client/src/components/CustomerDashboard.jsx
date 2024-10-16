@@ -24,36 +24,39 @@ function CustomerDashboard() {
 
       getServices();
     }, []);
+    
 
     const handleConfirm = () => {
         setShowModal(true);
     };
 
     // Save ticket detaild to the backend
-    const addTicket = async () => {
-      try {
-        const result = await API.addTicket(selectedService.sid);
-        console.log(result);
-      } catch(error) {
-        throw error;
-      }
-    };
+    // Add state for loading and error
 
-    const handleProceed = () => {
+
+const addTicket = async () => {
+    try {
+        const result = await API.addTicket(selectedService.sid); // Pass selectedService.sid
+        
+        console.log(result); // Log the result for debugging
+        return result; // Return the result for further use if necessary
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+    } 
+};
+
+
+    const handleProceed = async() => {
         // Generate ticket details when the user confirms
-        const ticketNumber = Math.random().toString(36).substr(2, 6).toUpperCase(); // 6-character alphanumeric
         //const counterNumber = Math.floor(Math.random() * 10) + 1;
-        const qrValue = `${selectedService.svcName} - Ticket: ${ticketNumber}`; //, Counter: ${counterNumber} in case if we need counternumber in the future
-
+        
+        const ticket=  await addTicket();
+        const qrValue = `${selectedService.svcName} - Ticket: ${ticket.tCode}`; //, Counter: ${counterNumber} in case if we need counternumber in the future
         const ticketDetails = {
             service: selectedService.svcName,
-            ticketNumber,
-            //counterNumber,
+            ticketNumber: ticket.tCode,
             qrValue,
         };
-
-        addTicket(); // Save ticket details to the backend
-
         // Navigate to the ticket display page with ticket details
         navigate('/customer/ticket', { state: ticketDetails });
 

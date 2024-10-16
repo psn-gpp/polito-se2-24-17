@@ -149,7 +149,6 @@ const getCounterServices = async (counterId) => {
 
     // If the response is successful (status code 2xx)
     if (response.ok) {
-      console.log("è entrato", response);
       const data = await response.json();
       return data; // This contains the services data
     } else {
@@ -198,7 +197,7 @@ const addTicket = async (serviceID) => {
     body: JSON.stringify({ sid: serviceID }),
   });
 
-  if(!response.ok) {
+  if(response.ok) {
     return await response.json();
   } else {
     throw await response.json().error;

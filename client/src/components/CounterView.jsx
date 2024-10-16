@@ -26,7 +26,6 @@ const CounterView = () => {
   const getCounterServices = async (counterId) => {
     try {
       const response = await API.getCounterServices(counterId); // Assuming you have a function in API to get counter services
-      console.log('Fetched services:', response);
         return response; // Return the fetched services
     } catch (error) {
       console.error('Error fetching counter services:', error.message);

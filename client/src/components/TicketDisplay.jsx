@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const TicketDisplay = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { service, ticketNumber, counterNumber } = location.state || {};
+    const { service, ticketNumber } = location.state || {};
     const printRef = useRef();
     //const [qrCodeUrl, setQrCodeUrl] = useState('');
 
@@ -36,7 +36,7 @@ const TicketDisplay = () => {
                 <QRCodeSVG value={ticketNumber} size={128} />
             </div>
             <Row className="mt-3 justify-content-center">
-                <Col xs="auto" classname="m-l-3">
+                <Col xs="auto" className="m-l-3">
                     <Button variant="primary" className="me-2" onClick={generatePDF}>Download/Print Ticket as PDF</Button>
                     <Button variant="danger" onClick={() => navigate('/customer')}>Go Home</Button>
                 </Col>
