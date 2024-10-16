@@ -1,10 +1,10 @@
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Navbar, Container } from "react-bootstrap";
 
 export function MyNavbar() {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
-    <Navbar bg="primary" variant="dark">
+    <Navbar bg="warning" variant="dark">
       <Container fluid>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-between">
