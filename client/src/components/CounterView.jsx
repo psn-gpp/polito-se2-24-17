@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Card, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom'
+import API from '../API.jsx';
 
 const CounterView = () => {
     const { counterId } = useParams();
@@ -12,9 +13,16 @@ const CounterView = () => {
         dateTime: new Date().toLocaleString(), // Current date and time
     };
 
-    const handleCallNextCustomer = () => {
+    const handleCallNextCustomer = async () => {
         // Logic to call the next customer (we can implement this as needed)
-        alert('Calling next customer...');
+        
+        try {
+          const result = await API.updateTicket(1, counterId);
+          alert('Calling next customer...');
+        } catch(error) {
+          console.error(error);
+          alert('No more customers in the queue!');  
+        }
     };
 
     return (
