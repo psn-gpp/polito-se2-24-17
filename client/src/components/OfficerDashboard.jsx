@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Card, Dropdown, Button, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 function OfficerDashboard() {
+    const navigate = useNavigate();
     const [selectedCounter, setSelectedCounter] = useState('');
 
     const handleCounterSelect = (counter) => {
@@ -13,9 +15,9 @@ function OfficerDashboard() {
         console.log('Selected Counter:', selectedCounter);
     };
 
-    const handleCancel = () => {
-        setSelectedCounter('');
-    };
+    // const handleCancel = () => {
+    //     setSelectedCounter('');
+    // };
 
     return (
         <Container className="mt-5">
@@ -37,7 +39,7 @@ function OfficerDashboard() {
                                 </Dropdown.Menu>
                             </Dropdown>
                             <div className="mt-3">
-                                <Button variant="secondary" onClick={handleCancel} className="me-2">
+                                <Button variant="secondary" onClick={() => navigate('/')} className="me-2">
                                     Cancel
                                 </Button>
                                 <Button variant="primary" onClick={handleConfirm} disabled={!selectedCounter}>

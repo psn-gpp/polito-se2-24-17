@@ -6,8 +6,9 @@ import Default from './components/Default';
 import Home from './components/Home';
 import ManagerDashboard from './components/ManagerDashboard';
 import OfficerDashboard from './components/OfficerDashboard';
-import CustomerDashboard from './components/CustomerDashboard';
-import DisplayDashboard from './components/DisplayBoard';
+import CustomerDashboard from './components/CustomerDashboard';;
+import DisplayBoard from './components/DisplayBoard';
+import TicketDisplay from './components/TicketDisplay';
 
 
 function App() {
@@ -19,7 +20,8 @@ function App() {
         <Route path='/manager' element={<Default />} />
         <Route path='/officer' element={<OfficerDashboard />} />
         <Route path='/customer' element={<CustomerDashboard />} />
-        <Route path='/display' element={<Default />} />
+        <Route path='/display' element={<DisplayBoard />} />
+        <Route path='/customer/ticket' element={<TicketDisplay />} />
       </Routes>
     </BrowserRouter>
   );

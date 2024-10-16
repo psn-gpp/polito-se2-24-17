@@ -39,7 +39,7 @@ function MyMain() {
                 </Col>
             </Row>
             <Row className="justify-content-center">
-                <Col xs={10} sm={6} md={4} lg={3}>
+                <Col xs={12} sm={6} md={4} lg={3}>
                     <Button className="w-150 p-5" variant="warning" onClick={() => navigate('/display')}>
                         DISPLAY BOARD
                     </Button>
