@@ -55,6 +55,9 @@ Content-Type: application/json
 ### Delete a specific counter by ID
 DELETE http://localhost:3001/api/counters/3 HTTP/1.1
 
+### Get all services of a specific counter todat
+GET http://localhost:3001/api/counters/2/services HTTP/1.1
+
 
 ### *****************************
 ### TICKET APIs test

@@ -6,6 +6,7 @@ import cors from 'cors';
 import ticketDao from './dao/ticketdao.js';
 import counterdao from './dao/counterdao.js';
 import servicedao from './dao/servicedao.js';
+import dayjs from 'dayjs';
 
 import session from "express-session";
 
@@ -226,6 +227,26 @@ app.delete("/api/counters/:id", async (req, res) => {
       return res.status(404).json({ error: "Counter not found" });
     }
     res.status(200).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+app.get("/api/counters/:id/services", async (req, res) => {
+  const counterId = parseInt(req.params.id);
+  const now = dayjs();
+  const formattedDate = now.format('YYYY-MM-DD');
+  try {
+    if (isNaN(counterId)) {
+      return res.status(400).json({ error: "Invalid counter ID" });
+    }
+
+    const result = await counterdao.getCounterServicesByDate(counterId,formattedDate);
+    if (!result) {
+      return res.status(404).json({ error: "Counter not found" });
+    }
+
+    res.json(result);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });

@@ -108,3 +108,30 @@ exports.existsCounter = (counterId) => {
     });
   });
 }
+/** 
+ * get all services of a counter specific counterid and date
+ * @param {number} counterId - The ID of the counter to retrieve.
+  *@param {string} date - The date of the counter to retrieve.
+ * @returns {Promise<Array>} A promise that resolves to an array of all services of a counter.
+*/  
+exports.getCounterServicesByDate = (counterId, date) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT 
+        cs.cid, cs.sid, cs.date, 
+        s.svcType, s.svcName, s.avgSvcTime
+      FROM COUNTER_SERVICE cs
+      JOIN SERVICE s ON cs.sid = s.sid
+      WHERE cs.cid = ? AND cs.date = ?
+    `;
+
+    db.all(query, [counterId, date], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+

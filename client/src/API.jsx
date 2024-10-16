@@ -1,3 +1,5 @@
+
+
 const URL = "http://localhost:3001/api";
 
 
@@ -139,6 +141,29 @@ const deleteCounter = async (counterID) => {
   }
 }
 
+const getCounterServices = async (counterId) => {
+  try {
+    const response = await fetch(URL +`/counters/${counterId}/services`, {
+      method: "GET",
+    });
+
+    // If the response is successful (status code 2xx)
+    if (response.ok) {
+      console.log("è entrato", response);
+      const data = await response.json();
+      return data; // This contains the services data
+    } else {
+      // If the response is not successful, handle errors
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error fetching counter services:", error.message);
+    throw error; // Throwing error so it can be handled in the UI or elsewhere
+  }
+};
+
+
 
 /******* TICKET APIs ********/
 
@@ -210,6 +235,7 @@ const deleteTicket = async (ticketID) => {
 
 
 
-const API = { getServices, getServiceByID, addService, updateService, deleteService, getCounters, getCounterByID, addCounter, updateCounter, deleteCounter, getTickets, getTicketByID, addTicket, updateTicket, deleteTicket };
+
+const API = { getServices, getServiceByID, addService, updateService, deleteService, getCounters, getCounterByID, addCounter, updateCounter, deleteCounter, getTickets, getTicketByID, addTicket, updateTicket, deleteTicket,getCounterServices };
 
 export default API;
