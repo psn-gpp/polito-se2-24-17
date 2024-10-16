@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Button, Row, Col, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
 import MyNavbar from './MyNavbar';
+import API from '../API.jsx';
 
 
 function DisplayBoard() {
     const navigate = useNavigate();
     // Example data for customers being served, we can replace the hardcoded data with a dynamic array from backend/db
-    const servedCustomers = [
-        { ticketCode: 'A001', counterNumber: 1 },
-        { ticketCode: 'A002', counterNumber: 2 },
-        { ticketCode: 'B001', counterNumber: 3 },
-        { ticketCode: 'C001', counterNumber: 4 },
-    ];
+    const [servedCustomers, setServedCustomers] = useState([]); 
+
+    useEffect(() => {
+      const getTickets = async () => {  
+        try {
+          const result = await API.getTickets();
+          setServedCustomers(result.filter( (ticket) => ticket.isServed == 1));
+        } catch (error) {
+          throw error;
+        }
+      }
+
+      getTickets();
+
+    }, []);
 
     return (
         <>
@@ -35,8 +45,8 @@ function DisplayBoard() {
                 <tbody>
                     {servedCustomers.map((customer, index) => (
                         <tr key={index}>
-                            <td>{customer.ticketCode}</td>
-                            <td>{customer.counterNumber}</td>
+                            <td>{customer.tid}</td>
+                            <td>{customer.cid}</td>
                         </tr>
                     ))}
                 </tbody>
