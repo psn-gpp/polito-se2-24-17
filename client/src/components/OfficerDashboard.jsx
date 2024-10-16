@@ -1,12 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Card, Dropdown, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import API from '../API.jsx';
 import MyNavbar from './MyNavbar';
 import { FaHome } from 'react-icons/fa';
 
 function OfficerDashboard() {
     const navigate = useNavigate();
     const [selectedCounter, setSelectedCounter] = useState('');
+    const [counters, setCounters] = useState([]);
+
+    useEffect(() => {
+      // Fetch counters from the backend
+      const getCounters = async () => {
+        try {
+          const result = await API.getCounters();
+          console.log(result);
+          setCounters(result);
+        } catch (error) {
+          throw error;
+        }
+      }
+
+      getCounters();
+    }, []);
 
     const handleCounterSelect = (counter) => {
         setSelectedCounter(counter);
@@ -15,7 +32,7 @@ function OfficerDashboard() {
     const handleConfirm = () => {
         // Handle the confirm action, e.g., navigating to the selected counter's page
         console.log('Selected Counter:', selectedCounter);
-        navigate(`/officer/${selectedCounter}`);
+        navigate(`/officer/${selectedCounter.cid}`);
     };
 
     return (
@@ -34,15 +51,11 @@ function OfficerDashboard() {
                             <Card.Title>Select a Counter</Card.Title>
                             <Dropdown>
                                 <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                    {selectedCounter || 'Select a Counter'}
+                                    {selectedCounter.cName || 'Select a Counter'}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-                                    <Dropdown.Item onClick={() => handleCounterSelect('Counter 1')}>Counter 1</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => handleCounterSelect('Counter 2')}>Counter 2</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => handleCounterSelect('Counter 3')}>Counter 3</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => handleCounterSelect('Counter 4')}>Counter 4</Dropdown.Item>
-                                    {/* we can add more counters as needed it will be fetched from backend dynamically too*/}
+                                    {counters.map((counter) => <Dropdown.Item key={counter.cid} onClick={() => handleCounterSelect(counter)}> {counter.cName}</Dropdown.Item>)}
                                 </Dropdown.Menu>
                             </Dropdown>
                             <div className="mt-3">
