@@ -467,7 +467,4 @@ The `ManagerDashboard` component is currently a placeholder for future functiona
 The `Default` component is displayed when users attempt to access an undefined route. It informs users that the requested page does not exist and provides a button to navigate back to the home page.
 
 
-## Class diagram
-
-
 ## Screenshot

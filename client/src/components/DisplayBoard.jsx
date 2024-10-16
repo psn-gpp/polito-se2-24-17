@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Button, Row, Col, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
+import MyNavbar from './MyNavbar';
 
 
 function DisplayBoard() {
@@ -15,6 +16,8 @@ function DisplayBoard() {
     ];
 
     return (
+        <>
+        <MyNavbar></MyNavbar>
         <Container className="mt-4">
             {/* Add the Home button */}
             <Button variant="primary" onClick={() => navigate('/')} className="mb-3">
@@ -39,6 +42,7 @@ function DisplayBoard() {
                 </tbody>
             </Table>
         </Container>
+        </>
     );
 }
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Card, Dropdown, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import MyNavbar from './MyNavbar';
+import { FaHome } from 'react-icons/fa';
 
 function OfficerDashboard() {
     const navigate = useNavigate();
@@ -17,7 +19,14 @@ function OfficerDashboard() {
     };
 
     return (
+        <>
+        <MyNavbar></MyNavbar>
+        
         <Container className="mt-5">
+            <Button variant="primary" onClick={() => navigate('/')} className="mb-3">
+                <FaHome style={{ marginRight: '8px' }} />
+                Back to Home
+            </Button>
             <Row className="justify-content-center">
                 <Col md={6}>
                     <Card className="text-center">
@@ -49,6 +58,7 @@ function OfficerDashboard() {
                 </Col>
             </Row>
         </Container>
+        </>
     );
 }
 

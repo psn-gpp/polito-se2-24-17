@@ -4,7 +4,7 @@ import { Navbar, Container } from "react-bootstrap";
 export function MyNavbar() {
   const navigate = useNavigate();
   return (
-    <Navbar bg="warning" variant="dark">
+    <Navbar bg="primary" variant="dark">
       <Container fluid>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-between">

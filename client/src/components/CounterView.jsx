@@ -1,10 +1,13 @@
 import React from 'react';
 import { Container, Card, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom'
+import MyNavbar from './MyNavbar';
+import { FaHome } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const CounterView = () => {
     const { counterId } = useParams();
-
+    const navigate = useNavigate();
     // Dummy data for currently served customer (we can replace it with actual data fetching logic)
     const currentCustomer = {
         ticketCode: 'A123',
@@ -18,7 +21,14 @@ const CounterView = () => {
     };
 
     return (
+        <>
+        <MyNavbar></MyNavbar>
+        
         <Container className="mt-5">
+            <Button variant="primary" onClick={() => navigate('/officer')} className="mb-3">
+                    <FaHome style={{ marginRight: '8px' }} />
+                    Back to selection of counters
+            </Button>
             <Card className="text-center">
                 <Card.Body>
                     <Card.Title>Counter: {counterId}</Card.Title>
@@ -29,6 +39,7 @@ const CounterView = () => {
                 </Card.Body>
             </Card>
         </Container>
+        </>
     );
 };
 

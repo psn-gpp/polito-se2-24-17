@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Modal, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
+import MyNavbar from './MyNavbar';
 function CustomerDashboard() {
     const navigate = useNavigate();
     const [selectedService, setSelectedService] = useState('');
@@ -39,6 +39,8 @@ function CustomerDashboard() {
     };
 
     return (
+        <>
+        <MyNavbar></MyNavbar>
         <Container>
             <h2>Select a Service</h2>
             <div style={{ width: '400px', margin: '0 auto' }}>
@@ -77,6 +79,7 @@ function CustomerDashboard() {
                 </Modal.Footer>
             </Modal>
         </Container>
+        </>
     );
 }
 

@@ -4,8 +4,11 @@ import { useLocation } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import MyNavbar from './MyNavbar';
+import { useNavigate } from 'react-router-dom';
 
 const TicketDisplay = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const { service, ticketNumber, counterNumber } = location.state || {};
     const printRef = useRef();
@@ -22,6 +25,8 @@ const TicketDisplay = () => {
     };
 
     return (
+        <>
+        <MyNavbar>  </MyNavbar>
         <Container className="text-center mt-5">
             <div ref={printRef} style={{ padding: '20px', border: '1px solid black', display: 'inline-block' }}>
                 <h3>Ticket for {service}</h3>
@@ -31,11 +36,13 @@ const TicketDisplay = () => {
                 <QRCodeSVG value={ticketNumber} size={128} />
             </div>
             <Row className="mt-3 justify-content-center">
-                <Col xs="auto">
-                    <Button variant="primary" onClick={generatePDF}>Download/Print Ticket as PDF</Button>
+                <Col xs="auto" classname="m-l-3">
+                    <Button variant="primary" className="me-2" onClick={generatePDF}>Download/Print Ticket as PDF</Button>
+                    <Button variant="danger" onClick={() => navigate('/customer')}>Go Home</Button>
                 </Col>
             </Row>
         </Container>
+        </>
     );
 };
 
