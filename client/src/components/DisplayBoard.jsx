@@ -1,8 +1,11 @@
 import React from 'react';
-import { Container, Row, Col, Table } from 'react-bootstrap';
+import { Container, Button, Row, Col, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { FaHome } from 'react-icons/fa';
+
 
 function DisplayBoard() {
+    const navigate = useNavigate();
     // Example data for customers being served, we can replace the hardcoded data with a dynamic array from backend/db
     const servedCustomers = [
         { ticketCode: 'A001', counterNumber: 1 },
@@ -12,7 +15,12 @@ function DisplayBoard() {
     ];
 
     return (
-        <Container className="mt-5">
+        <Container className="mt-4">
+            {/* Add the Home button */}
+            <Button variant="primary" onClick={() => navigate('/')} className="mb-3">
+                <FaHome style={{ marginRight: '8px' }} />
+                Back to Home
+            </Button>
             <h2 className="text-center">Customers Being Served</h2>
             <Table striped bordered hover>
                 <thead>
