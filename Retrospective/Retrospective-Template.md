@@ -44,10 +44,11 @@ sections:
 > story `#0` is for technical tasks, leave out story points (not applicable in this case)
 
 - Hours per task average, standard deviation (estimate and actual)
-| Metric               | Estimated Hours | Actual Hours |
-|----------------------|-----------------|--------------|
-| **Average**           | 3.27 hours      | 3.29 hours   |
-| **Standard Deviation**| 1.02 hours      | 1.34 hours   |
+  Estimated hours per task average: 3.27  
+  Standard deviation: 3.29h
+
+  Actual hours per task average: 1.02h  
+  Standard deviation: 1.34h
 
 - Total estimation error ratio: sum of total hours spent / sum of total hours effort - 1
 
