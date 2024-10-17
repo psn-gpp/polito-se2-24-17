@@ -2,6 +2,7 @@
 const dayjs = require("dayjs");
 const Ticket = require("../models/ticket.js");
 const db = require("../db/db");
+const counterdao = require("./counterdao.js");
 
 // TICKET APIs
 /*
@@ -188,26 +189,44 @@ exports.existsTicket = (ticketId) => {
 /**
  * Function use to implement the algorithm to get the next ticket to be served
  */
-exports.getNextTicket = () => {
+exports.getNextTicket =  (counterId) => {
   let svgTime= 999;
   let dimqueue = 0;
   let serviceId = 0;
   let now = dayjs().format("YYYY-MM-DD").toString();
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     // take only the tickets that are not served and that are not assigned to a counter
-    const query = "SELECT T.Sid, svcType, svcName, avgSvcTime, COUNT(*) as QueueLenSVC FROM TICKET T, SERVICE S WHERE T.sid = S.sid AND isServed = 0 AND date = ? AND cid is NULL GROUP BY T.sid, svcType, svcName;";
-    db.all(query, [now], (err, rows) => {
+    let now = dayjs().format("YYYY-MM-DD").toString();
+    let services = await counterdao.getCounterServicesByDate(counterId, now);
+
+    // Extract the service IDs (Sid) from the services array
+    let serviceIds = services.map(service => service.sid);
+
+    const placeholders = serviceIds.map(() => '?').join(',');
+
+    // SQL query with IN clause using the placeholders
+    const query = `
+        SELECT T.Sid, svcType, svcName, avgSvcTime, COUNT(*) as QueueLenSVC
+        FROM TICKET T, SERVICE S
+        WHERE T.sid = S.sid AND isServed = 0 AND date = ? AND cid is NULL
+        AND T.sid IN (${placeholders})  -- Using IN clause with placeholders
+        GROUP BY T.sid, svcType, svcName;
+    `;
+
+    db.all(query, [now,...serviceIds], async (err, rows) => {
       if (err) {
         reject(err);
       } else if (rows.length === 0) {
         resolve({error: `No tickets in the queue`});
       }
       else {
+
         const queues = rows.map(t => ({sid: t.sid, svcType: t.svcType, svcName: t.svcName, avgSvcTime: t.avgSvcTime, QueueLenSVC: t.QueueLenSVC}));
         for (const queue of queues) {
           if(queue.QueueLenSVC > dimqueue){
             dimqueue = queue.QueueLenSVC;
             svgTime = queue.avgSvcTime;
+            
             serviceId = queue.sid;
           }
           else if(queue.QueueLenSVC === dimqueue){
@@ -217,6 +236,7 @@ exports.getNextTicket = () => {
             }
           }
         }
+     
         // i got now the queue with the smallest average service time
         const query2 = "SELECT * FROM TICKET WHERE sid = ? AND isServed = 0 AND cid is NULL AND date = ? ORDER BY tCode ASC LIMIT 1";
         db.get(query2, [serviceId,now], (err, row) => {

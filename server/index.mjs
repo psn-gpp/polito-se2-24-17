@@ -349,6 +349,7 @@ app.patch('/api/tickets/:cid', async (req, res) => {
       return res.status(404).json({ error: `Counter id ${counterId} not found` });
     }
 
+
     // Check if request body contains a ticket ID (tid)
     if (req.body.tid) {
       const ticketId = parseInt(req.body.tid);
@@ -377,7 +378,7 @@ app.patch('/api/tickets/:cid', async (req, res) => {
       }
     }
     // get the next ticket for the counter
-    const nextTicket = await ticketDao.getNextTicket();
+    const nextTicket = await ticketDao.getNextTicket(counterId);
     if (nextTicket.error) {
         return res.status(404).json({ error: nextTicket.error });
     }
