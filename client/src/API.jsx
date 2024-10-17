@@ -205,6 +205,7 @@ const addTicket = async (serviceID) => {
 }
 
 const updateTicket = async ( ticketID, counterID) => {
+  console.log("sono entrato ?"+ticketID)
   const response = await fetch(URL + "/tickets/" + counterID, {
     method: "PATCH",
     headers: {
@@ -213,7 +214,7 @@ const updateTicket = async ( ticketID, counterID) => {
     body: JSON.stringify({ tid: ticketID }),
   });
 
-  if(!response.ok) {
+  if(response.ok) {
     return await response.json();
   } else {
     throw await response.json().error;

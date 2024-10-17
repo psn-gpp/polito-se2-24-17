@@ -197,7 +197,7 @@ Content-Type: application/json
 ### -----------------------------
 
 ### update a ticket tid: set it as served, if it is already set to be at counter cid, then assign a new ticket to counter cid and that tid  will be used for next api to set isserved finished.
-PATCH http://localhost:3001/api/tickets/2
+PATCH http://localhost:3001/api/tickets/1
 Content-Type: application/json
 
 {
