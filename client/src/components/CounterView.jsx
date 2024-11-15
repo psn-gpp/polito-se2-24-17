@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Button, ListGroup } from 'react-bootstrap';
+import { Container, Card, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import API from '../API.jsx';
 import MyNavbar from './MyNavbar';
